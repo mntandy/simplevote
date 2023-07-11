@@ -7,7 +7,7 @@ import Code from '@/app/components/Code'
 import useUser from "@/app/hooks/useUser"
 import AdminNavbar from "@/app/components/AdminNavbar"
 
-export default ({ params }) => {
+const Page = ({ params }) => {
     const msg = useMessage(null)
     const user = useUser(msg.setError)
 
@@ -29,3 +29,5 @@ export default ({ params }) => {
         </>
     )
 }
+
+export default Page

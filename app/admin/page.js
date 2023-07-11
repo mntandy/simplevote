@@ -1,7 +1,6 @@
 'use client'
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Login from "@/app/components/Login"
-import Sessions from "@/app/components/Sessions"
 import Message from "@/app/components/Message"
 import useMessage from "@/app/hooks/useMessage"
 import CreateNewVote from "@/app/components/CreateNewVote"

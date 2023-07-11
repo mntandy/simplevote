@@ -9,7 +9,7 @@ import AdminNavbar from "@/app/components/AdminNavbar"
 import useUser from "@/app/hooks/useUser"
 import SessionsAsAdmin from "@/app/components/SessionsAsAdmin"
 
-export default () => {
+const Page = () => {
     const msg = useMessage()
     const user = useUser(msg.setError)
     const [state, setState] = useState("ongoing")
@@ -35,3 +35,5 @@ export default () => {
         </div>
         </>)
 }
+
+export default Page

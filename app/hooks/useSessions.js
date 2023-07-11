@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-export default ({organiser,setError}) => {
+const useSessions = ({organiser,setError}) => {
     const [ongoing,setOngoing] = useState([])
     const [expired,setExpired] = useState([])
     const [isLoading, setLoading] = useState(false)
@@ -34,3 +34,5 @@ export default ({organiser,setError}) => {
 
     return {ongoing,expired,isLoading,refetch}
 }
+
+export default useSessions

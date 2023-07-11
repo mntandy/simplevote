@@ -3,7 +3,7 @@ import Sessions from "../components/Sessions"
 import Message from "@/app/components/Message"
 import useMessage from "@/app/hooks/useMessage"
 
-export default ({ params }) => {
+const Page = ({ params }) => {
     const msg = useMessage()
     
     return (
@@ -13,3 +13,5 @@ export default ({ params }) => {
         </div>
     )
 }
+
+export default Page

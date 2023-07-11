@@ -6,7 +6,7 @@ import Settings from "@/app/components/Settings"
 import Message from "@/app/components/Message"
 import useMessage from "@/app/hooks/useMessage"
 
-export default () => {
+const Page = () => {
 
     const [user, setUser] = useState(null)
     const [newUser,setNewUser] = useState(false)
@@ -26,3 +26,5 @@ export default () => {
         </div>
     )
 }
+
+export default Page

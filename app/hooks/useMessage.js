@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-export default () => {
+const useMessage = () => {
     const [text,setText] = useState(null)
     const [style,setStyle] = useState(null)
 
@@ -21,3 +21,5 @@ export default () => {
     }
     return {text,style,reset,setError,set}
 }
+
+export default useMessage

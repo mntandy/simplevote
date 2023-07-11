@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-export default (setError) => {
+const useUser = (setError) => {
     const [token,setToken] = useState(null)
     const [email,setEmail] = useState(null)
     const [nickname,setNickname] = useState(null)
@@ -90,3 +90,5 @@ export default (setError) => {
 
     return {login,ok,set,nickname,email,token,logout,loading}
 }
+
+export default useUser

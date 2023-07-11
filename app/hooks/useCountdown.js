@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import useInterval from "@/app/hooks/useInterval"
 
-export default () => {
+const useCountdown = () => {
     const [timeleft,setTimeleft] = useState(null)
     const interval = useInterval()
     
@@ -34,3 +34,5 @@ export default () => {
     return { initialise, timeleft }
 
 }
+
+export default useCountdown

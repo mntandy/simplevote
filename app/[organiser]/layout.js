@@ -1,6 +1,6 @@
 import AdminNavbar from "@/app/components/AdminNavbar"
 
-export default ({ children,params }) => {
+const Layout = ({ children,params }) => {
     return (
     <div className="container">
         <AdminNavbar/>
@@ -12,4 +12,6 @@ export default ({ children,params }) => {
         </div>
         </div>
     </div>)
-  }
+}
+
+export default Layout

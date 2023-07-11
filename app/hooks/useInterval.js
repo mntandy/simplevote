@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
 
-export default () => {
+const useInterval () => {
 
     const [repeat,setRepeat] = useState(null)
 
@@ -22,5 +22,7 @@ export default () => {
     }
 
     return {clear,set}
-} 
+}
+
+export default useInterval
 

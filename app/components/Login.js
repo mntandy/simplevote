@@ -1,7 +1,7 @@
 'use client'
 import { useRef } from "react"
 
-export default ({user,toggleNewUser=null}) => {
+export default function Login ({user,toggleNewUser=null}) {
     const inputEmail = useRef(null)   
     const inputPassword = useRef(null)
 

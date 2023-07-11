@@ -2,7 +2,7 @@
 import { useState } from "react"
 import CreateNewVote from "../components/CreateNewVote"
 
-export default ({setUser,user,toggleNewUser,msg}) => {
+export default function Settings({setUser,user,toggleNewUser,msg}) {
     const [settingsState,setSettingsState] = useState(null)
     
     const changeState = (newState) => () => {

@@ -10,9 +10,14 @@ export default () => {
         setText(t)
         setStyle(s)
     }
+
+    const setError = (str) => {
+        set("is-danger",str)
+    }
+
     const reset = () => {
         setText(null)
         setStyle(null)
     }
-    return {text,style,reset,set}
+    return {text,style,reset,setError,set}
 }

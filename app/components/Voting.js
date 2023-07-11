@@ -19,7 +19,7 @@ const BarSvg = ({votes,rowId}) => {
     )
 }
 
-export default ({organiser, user, session, msg}) => {
+export default function Voting({organiser, user, session, msg}) {
     const [data,setData] = useState()
     const [votingToken,setVotingToken] = useState(null)
     const [requestKey,setRequestKey] = useState(false)
@@ -41,12 +41,12 @@ export default ({organiser, user, session, msg}) => {
                 body: JSON.stringify({votingToken})}  )
             const body = await response.json()
             if(!response.ok)
-                msg.set("is-danger",body.error)
+                msg.setError(body.error)
             else
                 setPreviousVote(body.previousVote)
         }
         catch (error) {
-            msg.set("is-danger","error fetching previous voting.")
+            msg.setError("error fetching previous voting.")
         }
     }
     
@@ -61,7 +61,7 @@ export default ({organiser, user, session, msg}) => {
         const body = await response.json()
         
         if(body.error)
-            msg.set("is-danger", body.error)
+            msg.setError(body.error)
         else
             setData(body)
         
@@ -79,14 +79,14 @@ export default ({organiser, user, session, msg}) => {
                 body: JSON.stringify({userToken:user.token})}  )
             const body = await response.json()
             if(!body.token && body.error)
-                    msg.set("is-danger",body.error)
+                    msg.setError(body.error)
             else {
                 setVotingToken(body.token)
                 return false
             }
         }
         catch (error) {
-            msg.set("is-danger","error checking user token.")
+            msg.setError("error checking user token.")
         }
         return true
     }
@@ -96,14 +96,14 @@ export default ({organiser, user, session, msg}) => {
             const response = await fetch(`/api/vote/${organiser}/${session}/token`)
             const body = await response.json()
             if(body.error)
-                msg.set("is-danger", body.error)
+                msg.setError(body.error)
             else if(body.protected) {
                 setRequestKey(checkUserToken())
             }
             else saveVotingToken(body.token)
         }
         catch (error) {
-            msg.set("is-danger", "something went wrong when obtaining voting rights.")
+            msg.setError("something went wrong when obtaining voting rights.")
         }
     }
 
@@ -138,7 +138,7 @@ export default ({organiser, user, session, msg}) => {
             })
             const body = await response.json()
             if(body.error)
-                msg.set("is-danger",body.error)
+                msg.setError(body.error)
             else if(body.info)
                 msg.set("is-info",body.info)
             else {
@@ -148,7 +148,7 @@ export default ({organiser, user, session, msg}) => {
             }
         }
         catch (exception) {
-            msg.set("is-danger","Something went wrong.")
+            msg.setError("Something went wrong.")
         }
     }
 

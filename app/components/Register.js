@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react"
 
-export default ({user,toggleNewUser,msg}) => {
+export default function Register({user,toggleNewUser,msg}) {
     const [nickname, setNickname] = useState('a')
     const [email, setEmail] = useState('a@a.a')   
     const [password, setPassword] = useState('')
@@ -38,7 +38,7 @@ export default ({user,toggleNewUser,msg}) => {
                 }
             }
             catch (exception) {
-                msg.set("is-danger","Error registering user.")
+                msg.setError("Error registering user.")
             }
         }
     }
@@ -64,7 +64,7 @@ export default ({user,toggleNewUser,msg}) => {
                 <label className="label">Retype password</label>
                 <input className="input" type="password" value={retypepassword} placeholder="Password"
                     onChange={({ target }) => setRetypePassword(target.value)}/>
-                {password!==retypepassword && <p className="help is-danger">"Passwords do not match."</p>}
+                {password!==retypepassword && <p className="help is-danger">Passwords do not match.</p>}
             </div>
             <div className="field">
                 <label className="label">Nickname</label>

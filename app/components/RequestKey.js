@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export default ({saveVotingToken,organiser,session,msg}) => {
+export default function RequestKey({saveVotingToken,organiser,session,msg}) {
     const [key,setKey] = useState("")
     const handleSubmitKey = async () => {
         try {
@@ -15,14 +15,14 @@ export default ({saveVotingToken,organiser,session,msg}) => {
                 })
             const body = await result.json()
             if(body.error)
-                msg.set("is-danger",body.error)
+                msg.setError(body.error)
             else {
                 saveVotingToken(body.token)
             }
         }
         catch (exception) {
             console.log(exception)
-            msg.set("is-danger","Something went wrong.")
+            msg.setError("Something went wrong.")
         }
     }
 

@@ -2,8 +2,8 @@
 
 import useSessions from '@/app/hooks/useSessions'
 
-export default ({organiser="", msg}) => {
-    const sessions = useSessions({organiser,setError: (text) => msg.set("is-danger",text)})
+export default function Session({organiser="", msg}) {
+    const sessions = useSessions({organiser,setError: msg.setError})
     const Session = ({e}) =>
         (<a href={"/" + organiser + "/" + e.id}>{e.description}</a>)
     return (

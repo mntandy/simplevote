@@ -9,7 +9,7 @@ import AdminNavbar from "@/app/components/AdminNavbar"
 
 export default ({ params }) => {
     const msg = useMessage(null)
-    const user = useUser((str) => msg.set("is-danger",str))
+    const user = useUser(msg.setError)
 
     return (
         <>

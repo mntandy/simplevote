@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react"
 
-export default ({user,msg,resetState}) => {
+export default function CreateNewVote({user,msg,resetState}) {
     
     const initialForm = {
         description: "",
@@ -54,7 +54,7 @@ export default ({user,msg,resetState}) => {
                     })
             const body = await result.json()
             if(body.error)
-                msg.set("is-danger",body.error)
+                msg.setError(body.error)
             else {
                 setForm(initialForm)
                 setOptions([])
@@ -63,7 +63,7 @@ export default ({user,msg,resetState}) => {
             }
         }
         catch (exception) {
-            msg.set("is-danger","Something went wrong.")
+            msg.setError("Something went wrong.")
         }
     }
     }

@@ -2,8 +2,8 @@
 
 import useSessions from '@/app/hooks/useSessions'
 
-export default ({user}) => {
-    const sessions = useSessions({organiser:user.nickname,setError: (text) => msg.set("is-danger",text)})
+export default function SessionsAsAdmin({user}) {
+    const sessions = useSessions({organiser:user.nickname,setError: msg.setError})
 
     const handleEdit = (id) => () => {}
 
@@ -17,7 +17,7 @@ export default ({user}) => {
                     }})
             const body = await result.json()
             if(body.error)
-                msg.set("is-danger",body.error)
+                msg.setError(body.error)
             else {
                 msg.set("is-success","Voting session deleted.")
                 sessions.refetch()
@@ -25,7 +25,7 @@ export default ({user}) => {
         }
         catch (exception) {
             console.log(exception)
-            msg.set("is-danger","Something went wrong.")
+            msg.setError("Something went wrong.")
         }
     }
     const Session = ({e}) =>

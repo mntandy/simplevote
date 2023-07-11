@@ -11,7 +11,7 @@ import SessionsAsAdmin from "@/app/components/SessionsAsAdmin"
 
 export default () => {
     const msg = useMessage()
-    const user = useUser((str) => msg.set("is-danger",str))
+    const user = useUser(msg.setError)
     const [state, setState] = useState("ongoing")
     const resetState = () => setState("ongoing")
     

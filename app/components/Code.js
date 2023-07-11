@@ -27,12 +27,14 @@ const useKey = (url,token,msg) => {
         }
 
         fetchKey()
-        return {key}
     },[])
+    return {key}
 }
 
-export default function Code ({session,user,msg}) {
+const Code = ({session,user,msg}) => {
     const sessionKey = useKey(`/api/vote/${user.nickname}/${session}/key`,user.token,msg)
     
     return <h4 className="title is-4"> Code to vote: {sessionKey.key} </h4>
 }
+
+export default Code

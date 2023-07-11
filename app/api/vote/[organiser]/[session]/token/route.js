@@ -8,12 +8,12 @@ const isObjectIdValid = (id) => mongoose.Types.ObjectId.isValid(id)
 
 export async function GET(request, { params }) {
     if(!isObjectIdValid(params.session))
-        return NextResponse.json({ error: "voteid is invalid"})
+        return NextResponse.json({ error: "no such session"})
     try {
         await dbConnect()
         const user = await User.findOne({nickname: params.organiser},{ sessions: {  $elemMatch: {_id: params.session} } })
         if(!user || !user.sessions.length)
-            return NextResponse.json({ error: "voteid is invalid"})
+            return NextResponse.json({ error: "no user or no session."})
         if(user.sessions[0].protected) {
             return NextResponse.json({ protected: true })
         }

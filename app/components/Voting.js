@@ -98,7 +98,7 @@ export default function Voting({organiser, user, session, msg}) {
             if(body.error)
                 msg.setError(body.error)
             else if(body.protected) {
-                setRequestKey(checkUserToken())
+                setRequestKey(await checkUserToken())
             }
             else saveVotingToken(body.token)
         }
@@ -114,6 +114,7 @@ export default function Voting({organiser, user, session, msg}) {
         else
             fetchVotingRights()
     }, [])
+
     useEffect(() => {
         if(votingToken) {
             fetchVotingData()

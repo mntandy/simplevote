@@ -24,7 +24,7 @@ const Page = () => {
             {!user.ok && <Login user={user}/>}
             {user.ok && state==="ongoing" &&
             <>
-                <SessionsAsAdmin user={user}/>
+                <SessionsAsAdmin user={user} msg={msg}/>
                 <button className="button" onClick={() => setState("newvote")}>Create new voting session</button>
             </>}
             {user.ok && state==="newvote" &&

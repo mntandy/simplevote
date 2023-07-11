@@ -2,7 +2,7 @@
 
 import useSessions from '@/app/hooks/useSessions'
 
-export default function SessionsAsAdmin({user}) {
+const SessionsAsAdmin = ({user,msg}) => {
     const sessions = useSessions({organiser:user.nickname,setError: msg.setError})
 
     const handleEdit = (id) => () => {}
@@ -81,3 +81,5 @@ export default function SessionsAsAdmin({user}) {
             </div>
         </>)
 }
+
+export default SessionsAsAdmin

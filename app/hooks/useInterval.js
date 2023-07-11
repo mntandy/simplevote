@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
 
-const useInterval () => {
+const useInterval = () => {
 
     const [repeat,setRepeat] = useState(null)
 

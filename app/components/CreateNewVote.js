@@ -71,7 +71,7 @@ const CreateNewVote = ({sessions,close,user}) => {
             </label>
             <label className="label">Add options (add multiple at once, separated by new-line):
                 <textarea className="textarea has-fixed-size" rows="5" name="optionsInput" onChange={handleChange} value={form.optionsInput}></textarea></label>
-                    {optionsInfo && <p class="help is-danger">Please add some options by writing them in the textbox and clicking "add options"</p>}
+                    {optionsInfo && <p class="help is-danger">Please add some options by writing them in the textbox and clicking <i>add options</i></p>}
             <button className="button" onClick={handleAddOptions}>Add options</button>
                 {optionsAreOk() && 
                     <label className="label">Current options:

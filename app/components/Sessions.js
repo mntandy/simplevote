@@ -16,7 +16,7 @@ const Sessions = ({sessions,organiser}) => {
                 </>}
             <div>
                 {sessions.ongoing.map(e => 
-                    <Session e={e}/>)}
+                    <Session key={e} e={e}/>)}
             </div>
             </div>
         </>)

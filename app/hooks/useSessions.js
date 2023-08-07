@@ -11,7 +11,6 @@ const useSessions = ({organiser=null}) => {
     const [isLoggedIn,setLoggedIn] = useState(false)
     const [isLoading,setLoading] = useState(false)
     const [{ongoing,expired},setSessions] = useState({ongoing:[],expired:[]})
-    console.log(user)
     const reset = () => {
         setSessions({ongoing:[],expired:[]})
     }

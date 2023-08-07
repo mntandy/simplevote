@@ -25,7 +25,7 @@ const Page = ({ params }) => {
             state.set(states.READY)
     },[sessions.isLoading])
 
-    return (<>{sateComponents[state.current]}</>)
+    return (<>{stateComponents[state.current]}</>)
 }
 
 export default Page

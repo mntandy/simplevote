@@ -1,27 +1,25 @@
 'use client'
 
-import useSessions from '@/app/hooks/useSessions'
-
-export default function Session({organiser="", msg}) {
-    const sessions = useSessions({organiser,setError: msg.setError})
+const Sessions = ({sessions,organiser}) => {
     const Session = ({e}) =>
         (<a href={"/" + organiser + "/" + e.id}>{e.description}</a>)
+
+    
     return (
         <>
-            <h4 className="title is-4"> Voting sessions </h4>
-            <div className="content">
-            {sessions.isLoading && <p>Loading...</p>}
+            <h1 align="center"> Live sessions </h1>
+            <div className="centered">
             {(!Array.isArray(sessions.ongoing) || !sessions.ongoing.length) && 
                 <>
                     <p>Could not find any ongoing voting sessions...</p> 
                     <p>If you are {organiser}, then you can <a href="/admin">log in to create a new voting session.</a></p>
                 </>}
-            <ul style={{listStyleType: "none"}}>
+            <div>
                 {sessions.ongoing.map(e => 
-                    <li key={e.id}>
-                            <Session e={e}/>
-                    </li>)}
-            </ul>
+                    <Session e={e}/>)}
+            </div>
             </div>
         </>)
 }
+
+export default Sessions

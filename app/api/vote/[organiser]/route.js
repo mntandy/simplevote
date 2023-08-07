@@ -17,11 +17,8 @@ export async function GET(request, { params }) {
             expiration: '$sessions.expiration'
         }}]).sort({expiration: -1})
     const now = new Date(Date.now())
-    console.log(now)
-    console.log(sessions)
-    console.log(sessions.findIndex(e => !("expiration" in e) || now > e.expiration))
-    const [ongoing,expired] = splitAt(sessions,sessions.findIndex(e => !("expiration" in e) || now > e.expiration))
+    const [ongoingSessions,expiredSessions] = splitAt(sessions,sessions.findIndex(e => !("expiration" in e) || now > e.expiration))
     if(sessions!==null) 
-        return NextResponse.json({ ongoing,expired, nickname: params.organiser })
+        return NextResponse.json({ ongoingSessions,expiredSessions, nickname: params.organiser })
     return NextResponse.json({error: "User not found"},{status: 400})
 }

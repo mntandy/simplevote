@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useState,useEffect } from "react"
+import useApi from "@/app/hooks/useApi"
 
-const useUser = (setError) => {
+const useUser = () => {
     const [token,setToken] = useState(null)
     const [email,setEmail] = useState(null)
     const [nickname,setNickname] = useState(null)
-    const [ok,setOk] = useState(false)
-    const [loading,setLoading] = useState(true)
+    const authApi = useApi({path:"/auth"})
 
     const logout = () => {
         setToken(null)
@@ -21,74 +21,50 @@ const useUser = (setError) => {
         setEmail(email)
         setNickname(nickname)
         sessionStorage.setItem("vote4user",token)
-        setOk(true)
     }
 
     const login = async ({email,password}) => {
-        try {
-            const result = await fetch('/api/auth/login/', {
-                    method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email,
-                        password
-                    }),
-                })
-            const body = await result.json()
-            if(body.error)
-                setError(body.error)
-            else {
-                set(body)
-            }
-        }
-        catch (exception) {
-            setError("Something went wrong.")
+        if(authApi) {
+            const responseBody = await authApi.post({
+                url:"/login",
+                requestBody:{email,password},
+                expectedProperties:["token","email","nickname"]})
+                if(responseBody)
+                    set(responseBody)
         }
     }
 
     const verifyToken = async (newToken) => {
-        try {
-            const result = await fetch('/api/auth/token/', {
-                    method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        token:newToken,
-                    }),
-                })
-            const body = await result.json()
-            if(body.error)
-                setError(body.error)
-            else if(body.expired)
-                logout()
-            else if(body.token!==newToken || !body.email || !body.nickname)
-                setError("something went wrong.")
+        if(authApi) {
+            const responseBody = await authApi.post({
+                logout,
+                url:"/token",
+                requestBody:{token:newToken},
+                expectedProperties:["token","email","nickname"],
+                additionalTest: {
+                    func: (body) => (body.token===newToken),
+                    error: "Bad data received from server."
+                },
+            })
+            if(responseBody)
+                set(responseBody)
             else
-                set(body)
+                logout()
         }
-        catch (exception) {
-            setError("Something went wrong.")
-        }
-        setLoading(false)
     }
 
-    const getUserTokenFromStorage = () => {
-        const storedToken = sessionStorage.getItem("vote4user")
+    const getTokenFromStorage = () => sessionStorage.getItem("vote4user")
+
+    const processToken = (storedToken) => {
         if(storedToken)
             verifyToken(storedToken)
-        else
-            setLoading(false)
     }
 
     useEffect(() => {
-        getUserTokenFromStorage()
+        processToken(getTokenFromStorage())
     },[])
 
-
-    return {login,ok,set,nickname,email,token,logout,loading}
+    return {login,nickname,email,token,logout}
 }
 
 export default useUser

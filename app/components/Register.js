@@ -1,20 +1,26 @@
 'use client'
-import { useState } from "react"
+import { useState, useContext } from "react"
+import { MessageContext } from '@/app/contexts'
 
-export default function Register({user,toggleNewUser,msg}) {
-    const [nickname, setNickname] = useState('a')
-    const [email, setEmail] = useState('a@a.a')   
+export default function Register() {
+    const msg = useContext(MessageContext)
+    const [nickname, setNickname] = useState('')
+    const [email, setEmail] = useState('')   
     const [password, setPassword] = useState('')
     const [retypepassword, setRetypePassword] = useState('')
     const [emailError,setEmailError] = useState(null)
     const [nicknameError,setNicknameError] = useState(null)
     const [passwordError,setPasswordError] = useState(null)
     
+    const reset = () => {
+        setEmail('')
+        setPassword('')
+        setNickname('')
+    }
+
     const handleRegister = async (event) => {
-        if(nickname==="") {
+        if(nickname==="")
             setNicknameError("This cannot be empty.")
-            console.log("set")
-        }
         if(email==="")
             setEmailError("This cannot be empty.")
         if(nickname!=="" && email!=="" && password===retypepassword) {
@@ -30,28 +36,24 @@ export default function Register({user,toggleNewUser,msg}) {
                 if(body.nicknameExists) setNicknameError("This username is unavailable")
                 if(!body.emailExists && !body.nicknameExists &&
                     body.email && body.nickname) {
-                    msg.set("is-success","Registration of " + body.email + " with nickname " + body.nickname + " was successful!")
-                    user.set(body)
-                    setEmail('')
-                    setPassword('')
-                    setNickname('')
+                    msg.setSucess("Registration of " + body.email + " with nickname " + body.nickname + " was successful!")
+                    reset()
                 }
             }
             catch (exception) {
+                console.log(exception)
                 msg.setError("Error registering user.")
             }
         }
     }
     return (
-        <div className="container">
-            <div className="column is-half is-offset-one-quarter">
+        <div>
             <div className="field">
                 <label className="label">Email</label>
                 <input className="input" type="email" placeholder="Email input"
                     onChange={({ target }) => setEmail(target.value)} value={email}
                     onClick={(event) => setEmailError(null)}/>
                 {emailError && <p className="help is-danger">{emailError}</p>}
-
             </div>
             <div className="field">
                 <label className="label">Password</label>
@@ -73,15 +75,14 @@ export default function Register({user,toggleNewUser,msg}) {
                     onClick={(event) => setNicknameError(null)}/>
                 {nicknameError && <p className="help is-danger">{nicknameError}</p>}
             </div>
-        <div className="field is-grouped">
-            <div className="control">
-                <button className="button is-link" onClick={handleRegister}>Register</button>
-            </div>
-            <div className="control">
-                <button className="button is-link is-light" onClick={toggleNewUser}>Cancel</button>
+            <div className="field is-grouped">
+                <div className="control">
+                    <button className="button is-link" onClick={handleRegister}>Register</button>
+                </div>
+                <div className="control">
+                    <button className="button is-link is-light" onClick={reset}>Cancel</button>
+                </div>
             </div>
         </div>
-        </div>
-    </div>
     )
 }

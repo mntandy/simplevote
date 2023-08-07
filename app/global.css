@@ -1,0 +1,205 @@
+body {
+    background-color: rgb(215, 215, 215);
+    font-family: Sanchez;
+}
+
+nav {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    background-color: black;
+}
+
+.nav-left {
+    color: black;
+    justify-self: center;
+    align-self: start;
+}
+
+.nav-center {
+    padding: 1em;
+    color: black;
+    justify-self: center;
+    align-self: center;
+}
+.nav-right {
+    padding: 1em;
+    color: black;
+    justify-self: end;
+    align-self: start;
+}
+
+.nav-a {
+    text-decoration: none;  
+}
+
+.centered {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.right-aligned {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.left-aligned {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+
+.extra-padding {
+    padding: 20px;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 40%;
+    border-radius: 5px;
+}
+  
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+    padding: 20px;
+    background-color: hsl(0, 0%, 93%);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    display: flex;
+    margin: 30px;
+    justify-content: center;
+    border: 1px solid;
+}
+
+.message {
+    border: 2px solid rgb(232, 22, 47);
+}
+
+.key {
+    color:rgb(22, 113, 232);
+}
+.code {
+    border: 2px solid rgb(22, 113, 232);
+}
+
+label,input{
+    display:flex;
+    flex-direction:column;
+}
+
+.svgbar {
+    fill:rgb(22, 113, 232);
+    stroke:rgb(22, 113, 232);
+    stroke-width: 1px;
+}
+label {
+    font-size: 12px;
+}
+
+.small-width {
+    margin-top: 5px;
+    width: 200px;
+}
+
+input[type=text],input[type=email],input[type=password],input[type=number],textarea {
+    outline: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 2px transparent;
+    padding: 12px;
+    background-color: white;
+}
+
+input[type=radio] {
+    outline: none;
+    border-color:  #555;
+    border: 2px transparent;
+    padding: 0px;
+}
+
+input[type=radio]:checked {
+    background-color: black;
+    border: 2px solid black;
+}
+
+input[type=text],input[type=email],input[type=password],input[type=number] {
+    width: 176px;
+}
+
+input:hover, textarea:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+input:focus, textarea:focus {
+    border: 2px solid #555;
+}
+
+.button {
+    font-family: serif;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 24px;
+    background-color: rgb(22, 113, 232);
+    color: white;
+    margin: 5px;
+    padding: 15px;
+    border: 0;
+}
+
+.voting-button {
+    font-family: serif;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 24px;
+    margin: 5px;
+    padding: 15px;
+    border: 0;
+}
+
+.voted {
+    background-color: hsl(217, 71%, 53%);
+    color: white;
+}
+
+.session-button {
+    background-color: transparent;
+    cursor: pointer;
+    margin: 0px;
+    border: 0;
+}
+
+.message-text {
+    margin-left: 15px;
+    margin-right: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align-self: center;
+}
+
+.close-button {
+    font-size: 20px;
+    border: 1px solid;
+    border-radius: 10px;
+    padding-top: 0px;
+    margin: 3px;
+    line-height: 100%;
+    align-self: flex-start;
+    cursor:pointer;
+}
+
+.close-div::before {
+    display: inline-block;
+    content: "\00d7";
+}
+
+.radio {
+    font-size:14;
+    flex-direction:row;
+}

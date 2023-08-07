@@ -3,22 +3,22 @@ import { useEffect, useState } from "react"
 
 const useInterval = () => {
 
-    const [repeat,setRepeat] = useState(null)
+    const [id,setId] = useState(null)
 
     useEffect(() => {
         return () => clear()
     },[])
 
     const clear = () => {
-        if(repeat) {
-            clearInterval(repeat)
-            setRepeat(null)
+        if(id) {
+            clearInterval(id)
+            setId(null)
         }
     }
     const set = (f,interval) => {
-        if(repeat)
-            clearInterval(repeat)
-        setRepeat(setInterval(f,interval))
+        if(id)
+            clearInterval(id)
+        setId(setInterval(f,interval))
     }
 
     return {clear,set}

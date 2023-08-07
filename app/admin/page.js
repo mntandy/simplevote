@@ -1,37 +1,59 @@
 'use client'
-import { useState } from "react"
+
+import { useEffect } from 'react'
 import Login from "@/app/components/Login"
-import Message from "@/app/components/Message"
-import useMessage from "@/app/hooks/useMessage"
 import CreateNewVote from "@/app/components/CreateNewVote"
-import AdminNavbar from "@/app/components/AdminNavbar"
-import useUser from "@/app/hooks/useUser"
 import SessionsAsAdmin from "@/app/components/SessionsAsAdmin"
 
-const Page = () => {
-    const msg = useMessage()
-    const user = useUser(msg.setError)
-    const [state, setState] = useState("ongoing")
-    const resetState = () => setState("ongoing")
+import useSessions from '@/app/hooks/useSessions'
+import useSimpleStateMachine from '@/app/hooks/useSimpleStateMachine'
+
+const Switch = ({sessions}) => {
     
+    const states = {
+        SESSIONS: "sessions",
+        CREATENEW:"createnew",
+    }
+
+    const {current,set,reset} = useSimpleStateMachine(Object.values(states),states.SESSIONS)
+
+    const stateComponents = {
+        "sessions": <SessionsAsAdmin sessions={sessions} handleCreateNew={() => set("createnew")}/>,
+        "createnew": <CreateNewVote sessions={sessions} close={reset}/>,
+    }
+    return (<>{stateComponents[current]}</>)
+}
+
+const Page = () => {
+    const sessions = useSessions({loginRequired:true})
+
+    const states = {
+        LOADING: "loading",
+        READY:"ready",
+        LOGIN:"login",
+    }
+
+    const stateComponents = {
+        "loading": <p>Loading...</p>,
+        "ready": <Switch sessions={sessions}/>,
+        "login": <Login/>
+    }
+
+    const state = useSimpleStateMachine(Object.values(states),states.LOGIN)
+    
+    useEffect(() => {
+        if(sessions.isLoggedIn && sessions.isLoading)
+            state.set(states.LOADING)
+        else if(sessions.isLoggedIn && !sessions.isLoading)
+            state.set(states.READY)
+        else
+            state.set(states.LOGIN)
+    },[sessions.isLoading,sessions.isLoggedIn])
+
+
     return (
         <>
-        <AdminNavbar user={user}/>
-        <div className="columns is-mobile is-centered">
-        <div className="column is-narrow">
-            <Message msg={msg}/>
-            <div className="box">
-            {!user.ok && <Login user={user}/>}
-            {user.ok && state==="ongoing" &&
-            <>
-                <SessionsAsAdmin user={user} msg={msg}/>
-                <button className="button" onClick={() => setState("newvote")}>Create new voting session</button>
-            </>}
-            {user.ok && state==="newvote" &&
-                <CreateNewVote msg={msg} user={user} resetState={resetState}/>}
-            </div>
-        </div>
-        </div>
+            {stateComponents[state.current]}
         </>)
 }
 

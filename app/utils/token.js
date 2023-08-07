@@ -22,7 +22,7 @@ const getNewUserToken = (input) => {
     return jwt.sign(
         input,
         process.env.SECRET,
-        { expiresIn: 60 })
+        { expiresIn: 60*60 })
 }
 
 const getNewVotingToken = (input) => {
@@ -32,24 +32,14 @@ const getNewVotingToken = (input) => {
 }
 
 const decodeUserToken = async ({request}) => {
-    try {
-        return await verifyTokenFromHeader(request) 
-    }
-    catch(err) {
-        return { error: 'access-token missing from header', status: 400}
-    }
+        return await verifyTokenFromHeader(request)
 }
 
-const decodeVotingToken = async ({request,session,organiser}) => {
-    try {
-        const votingToken = await verifyTokenFromHeader(request)
-        if (votingToken.session===session && votingToken.organiser===organiser)
-            return votingToken
-        return { error: 'something is wrong with the voting token.', status: 400}
-    }
-    catch(err) {
-        return { error: 'voting token missing', status: 400}
-    }
+const decodeVotingToken = async ({request,sessionId,organiser}) => {
+    const votingToken = await verifyTokenFromHeader(request)
+    if (votingToken.sessionId===sessionId && votingToken.organiser===organiser)
+        return votingToken
+    return { error: 'something is wrong with the voting token.', status: 400}
 }
 
 export { decodeVotingToken, verifyTokenFromHeader, decodeUserToken, getNewUserToken, getNewVotingToken, verifyToken }

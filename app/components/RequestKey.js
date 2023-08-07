@@ -1,38 +1,19 @@
 import { useState } from "react"
 
-export default function RequestKey({saveVotingToken,organiser,session,msg}) {
+export default function RequestKey({submitKey}) {
     const [key,setKey] = useState("")
-    const handleSubmitKey = async () => {
-        try {
-            const result = await fetch(`/api/vote/${organiser}/${session}/key`, {
-                    method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        key
-                    }),
-                })
-            const body = await result.json()
-            if(body.error)
-                msg.setError(body.error)
-            else {
-                saveVotingToken(body.token)
-            }
-        }
-        catch (exception) {
-            console.log(exception)
-            msg.setError("Something went wrong.")
-        }
-    }
+
+    const handleSubmitKey = () => submitKey({key}) 
 
     return (
-    <div className="column is-half is-offset-one-quarter">
-        <div className="field">
-            <label className="label">Key</label>
-            <input className="input" type="text" name="key" placeholder="Key" onChange={({target}) => setKey(target.value)} value={key}/>
-            <div className="control">
-                <button className="button is-link" onClick={handleSubmitKey}>Enter</button>
+    <div className="container">
+        <div>
+            <label>
+                Enter key:
+                <input type="text" name="key" placeholder="Key" onChange={({target}) => setKey(target.value)} value={key}/>
+            </label>
+            <div className="right-aligned">
+                <button className="button right-align" onClick={handleSubmitKey}>Enter</button>
             </div>
         </div>
     </div>)

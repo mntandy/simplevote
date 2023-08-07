@@ -10,7 +10,7 @@ export async function GET(request, { params }) {
     
     await dbConnect()
 
-    const user = await User.findOne({ _id: decodedToken.id }).select({"sessions": { $elemMatch: { _id: params.session }}})
+    const user = await User.findOne({ _id: decodedToken.id }).select({"sessions": { $elemMatch: { _id: params.sessionId }}})
     if(user!==null && Array.isArray(user.sessions) && user.sessions.length)
         return NextResponse.json((user.sessions[0].protected ? { key: user.sessions[0].key } : { protected: false }))
     else
@@ -26,7 +26,7 @@ export async function POST(req,{ params }) {
     
     await dbConnect()
 
-    const user = await User.findOne({nickname: params.organiser},{ sessions: { $elemMatch: { _id: params.session } } })
+    const user = await User.findOne({nickname: params.organiser},{ sessions: { $elemMatch: { _id: params.sessionId } } })
     if(!user || !user.sessions.length)
         return NextResponse.json({ error: "session id is invalid"})
         
@@ -39,7 +39,7 @@ export async function POST(req,{ params }) {
     const token = getNewVotingToken(
         {
             organiser: params.organiser,
-            session: params.session,
+            sessionId: params.sessionId,
         })
 
     return NextResponse.json({ token }, {status: 200})

@@ -1,17 +1,31 @@
 'use client'
-import Sessions from "../components/Sessions"
-import Message from "@/app/components/Message"
-import useMessage from "@/app/hooks/useMessage"
+import Sessions from "@/app/components/Sessions"
+import { useEffect } from "react"
+import useSessions from "@/app/hooks/useSessions"
+import useSimpleStateMachine from '@/app/hooks/useSimpleStateMachine'
 
 const Page = ({ params }) => {
-    const msg = useMessage()
+    const sessions = useSessions({organiser:params.organiser})
+
+    const states = {
+        LOADING: "loading",
+        READY:"ready",
+    }
+    const stateComponents = {
+        "loading": <p>Loading...</p>,
+        "ready": <Sessions sessions={sessions} organiser={params.organiser}/>,
+    }
+
+    const state = useSimpleStateMachine(Object.values(states),states.LOADING)
     
-    return (
-        <div className="container">
-            <Message msg={msg}/>
-            <Sessions organiser={params.organiser} msg={msg}/>
-        </div>
-    )
+    useEffect(() => {
+        if(sessions.isLoading)
+            state.set(states.LOADING)
+        else
+            state.set(states.READY)
+    },[sessions.isLoading])
+
+    return (<>{sateComponents[state.current]}</>)
 }
 
 export default Page

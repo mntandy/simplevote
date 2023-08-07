@@ -1,38 +1,78 @@
 'use client'
+'use client'
 
-import { useEffect, useState } from "react"
+import { useState, useContext, useEffect } from "react"
+import useApi from "@/app/hooks/useApi"
+import { UserContext } from '@/app/contexts'
 
-const useSessions = ({organiser,setError}) => {
-    const [ongoing,setOngoing] = useState([])
-    const [expired,setExpired] = useState([])
-    const [isLoading, setLoading] = useState(false)
+const useSessions = ({organiser=null}) => {
+    const user = useContext(UserContext)
+    const sessionApi = useApi({path:"/vote"})
+    const [isLoggedIn,setLoggedIn] = useState(false)
+    const [isLoading,setLoading] = useState(false)
+    const [{ongoing,expired},setSessions] = useState({ongoing:[],expired:[]})
+    console.log(user)
+    const reset = () => {
+        setSessions({ongoing:[],expired:[]})
+    }
 
-    const fetchSessions = async () => {
-        try {
-            const response = await fetch(`/api/vote/${organiser}`)
-            const body = await response.json()
-            if(body.nickname===organiser && Array.isArray(body.ongoing) && Array.isArray(body.expired)) {
-                setOngoing(body.ongoing)
-                setExpired(body.expired)
+    const get = async () => {
+        setLoading(true)
+        const responseBody = await sessionApi.get({
+            url:`/${organiser ?? user.nickname}`,
+            expectedProperties:["ongoingSessions","expiredSessions","nickname"],
+            additionalTest: {
+                func: (body) => (body.nickname===(organiser ?? user.nickname) && Array.isArray(body.ongoingSessions) && Array.isArray(body.expiredSessions)),
+                error: "Bad data received from server."
             }
-                
-            else
-                (setError instanceof Function && setError("Received weird data from the server."))
-        }
-        catch (err) {
-            (setError instanceof Function && setError("Something bad happened when fetching list of voting sessions"))
-        }
+        })
+        if(responseBody)
+            setSessions({ongoing:responseBody.ongoingSessions,expired:responseBody.expiredSessions})
         setLoading(false)
     }
-        
+
+    const create = async ({session}) => {
+        if(user.token) {
+            const responseBody = await sessionApi.post({
+                url: "/create",
+                token: user.token,
+                requestBody: session,
+            })
+            return responseBody
+        }
+        return null
+    }
+
+    const remove = async ({id}) => {
+        if(user.token) {
+            const responseBody = await sessionApi.del({
+                url:`${user.nickname}/${id}`,
+                token: user.token,
+                })
+            if(responseBody)
+                get()
+        }
+    }
+
     useEffect(() => {
-        setLoading(true)
-        fetchSessions()
-    }, [])
+        if(!organiser) {
+            if(user.token) {
+                setLoggedIn(true)
+                get()
+            }
+            else {
+                reset()
+                setLoggedIn(false)
+            }
+        }
+    },[user.token])
 
-    const refetch = () => fetchSessions()
+    useEffect(() => {
+        if(organiser)
+            get()
+    },[])
 
-    return {ongoing,expired,isLoading,refetch}
+    return {isLoggedIn,isLoading,ongoing,expired,get,remove,create,reset}
 }
 
 export default useSessions

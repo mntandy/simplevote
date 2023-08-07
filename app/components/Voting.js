@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react"
 import RequestKey from '@/app/components/RequestKey'
-import useCountdown from '@/app/hooks/useCountdown'
-import 'bulma/css/bulma.min.css'
+import useVotingSession from '@/app/hooks/useVotingSession'
 
 const BarSvg = ({votes,rowId}) => {
     const [rowHeight,setRowHeight] = useState(15)
@@ -14,171 +13,65 @@ const BarSvg = ({votes,rowId}) => {
 
     return (
         <svg width={votes*2} height={rowHeight}>
-            <rect width={votes*2} height={rowHeight} style={{fill:"hsl(204, 86%, 53%)", stroke: "white", strokewidth: "2"}}/>
+            <rect width={votes*2} height={rowHeight} className="svgbar"/>
         </svg>
     )
 }
 
-export default function Voting({organiser, user, session, msg}) {
-    const [data,setData] = useState()
-    const [votingToken,setVotingToken] = useState(null)
-    const [requestKey,setRequestKey] = useState(false)
-    const [previousVote,setPreviousVote] = useState(null)
-    const countdown = useCountdown()
+const Countdown = ({timeleft}) => {
+    if(timeleft)
+        return <p> {timeleft} </p>
+    return null
+}
+
+const useToggleState = () => {
+    const [state,setState] = useState(false)
+    const toggle = () => setState(!state)
+    return [state,toggle]
+}
+
+const Voting = ({sessionId,sessionApi}) => {
     
-    const saveVotingToken = (t) => {
-        setVotingToken(t)
-        localStorage.setItem(organiser+session,t)
-    }
-
-    const fetchPreviousVoting = async () => {
-        try {
-            const response = await fetch(`/api/vote/${organiser}/${session}/token/`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({votingToken})}  )
-            const body = await response.json()
-            if(!response.ok)
-                msg.setError(body.error)
-            else
-                setPreviousVote(body.previousVote)
-        }
-        catch (error) {
-            msg.setError("error fetching previous voting.")
-        }
-    }
+    const [autoRefresh,toggleAutoRefresh] = useToggleState()
     
-    const fetchVotingData = async () => {
-        const response = await fetch(`/api/vote/${organiser}/${session}`, {
-            method: 'GET',
-            headers: {
-                'authorization': 'Bearer ' + votingToken,
-                'Content-Type': 'application/json',
-            }
-        })
-        const body = await response.json()
-        
-        if(body.error)
-            msg.setError(body.error)
-        else
-            setData(body)
-        
-    }
+    const votingSession = useVotingSession({sessionId,sessionApi,autoRefresh})
 
-    const checkUserToken = async () => {
-        if(!user || !user.token)
-            return true
-        try {
-            const response = await fetch(`/api/vote/${organiser}/${session}/user`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({userToken:user.token})}  )
-            const body = await response.json()
-            if(!body.token && body.error)
-                    msg.setError(body.error)
-            else {
-                setVotingToken(body.token)
-                return false
-            }
-        }
-        catch (error) {
-            msg.setError("error checking user token.")
-        }
-        return true
-    }
-
-    const fetchVotingRights = async () => {
-        try {
-            const response = await fetch(`/api/vote/${organiser}/${session}/token`)
-            const body = await response.json()
-            if(body.error)
-                msg.setError(body.error)
-            else if(body.protected) {
-                setRequestKey(await checkUserToken())
-            }
-            else saveVotingToken(body.token)
-        }
-        catch (error) {
-            msg.setError("something went wrong when obtaining voting rights.")
-        }
-    }
-
-    useEffect(() => {
-        const storedToken = localStorage.getItem(organiser+session)
-        if(storedToken)
-            setVotingToken(storedToken)
-        else
-            fetchVotingRights()
-    }, [])
-
-    useEffect(() => {
-        if(votingToken) {
-            fetchVotingData()
-            fetchPreviousVoting()
-        }
-    },[votingToken])
-
-    useEffect(() => {
-        if(data) 
-            countdown.initialise(new Date(data.expiration))
-    },[data])
-
-    const handleVote = (id) => async () => {
-        try {
-            const response = await fetch(`/api/vote/${organiser}/${session}`, {
-                method: 'POST',
-                headers: {
-                    'authorization': 'Bearer ' + votingToken,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id })
-            })
-            const body = await response.json()
-            if(body.error)
-                msg.setError(body.error)
-            else if(body.info)
-                msg.set("is-info",body.info)
-            else {
-                saveVotingToken(body.token)
-                setPreviousVote(id)
-                fetchVotingData()
-            }
-        }
-        catch (exception) {
-            msg.setError("Something went wrong.")
-        }
-    }
-
-    if (!votingToken && requestKey) return (<RequestKey saveVotingToken={saveVotingToken} organiser={organiser} session={session} msg={msg}/>)
-    else if (!votingToken || !data) return (<p>Loading...</p>)
+    if (votingSession.requestKey) 
+        return (<RequestKey submitKey={votingSession.submitKey}/>)
+    else if (!votingSession.requestKey && !votingSession.description) 
+        return (<p>Loading...</p>)
     else return (
-        <>
-            <h4 className="title is-4"> {data.description} </h4>
-            {"expiration" in data && countdown.timeleft && <p> {countdown.timeleft} </p> }
-            <table className="table is-narrow">
+        <div>
+            <h1 align="center"> {votingSession.description} </h1>
+            <div className="centered">
+                <Countdown timeleft={votingSession.timeleft}/>
+            </div>
+            <div className="right-aligned">
+            <label style={{fontSize:14, flexDirection:"row"}}>
+                <input type="checkbox" checked={autoRefresh} onChange={toggleAutoRefresh}/>
+                Auto-refresh
+            </label>
+            </div>
+            <table>
                 <thead>
                     <tr>
                         <th>Option</th>
                         <th>Select</th>
-                        <th>Total votes</th>
+                        <th colSpan={2}>Total votes</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {data.options.map(e => 
-                        <tr key={e.id} id={e.id}>
+                    {votingSession.options.map(e => 
+                        <tr key={e.id} >
                             <td>{e.description}</td>
-                            <td><button className={"button " + (previousVote===e.id? "is-success" : null)} onClick={handleVote(e.id)}>Vote!</button></td>
-                            <td>
-                                <span style={{float: "left"}}><BarSvg votes={e.votes} rowId={e.id}/></span>
-                                <span style={{float: "right"}} id={e.description}>{e.votes}</span>
-                            </td>
+                            <td><button id={e.id} className={"voting-button " + (votingSession.ownVote===e.id? "voted" : null)} onClick={votingSession.handleVote(e.id)}>Vote!</button></td>
+                            <td style={{paddingLeft:20}}><BarSvg votes={e.votes} rowId={e.id}/></td>
+                            <td>{e.votes}</td>
                         </tr>)}
                 </tbody>
             </table>
-        </>
+        </div>
     )
 }
+
+export default Voting

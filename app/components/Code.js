@@ -1,40 +1,41 @@
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
+import { UserContext } from '@/app/contexts'
 
-const useKey = (url,token,msg) => {
+const useKey = ({sessionApi}) => {
     const [key, setKey] = useState(null)
+    const user = useContext(UserContext)
 
     useEffect(() => {
         const fetchKey = async () => {
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json',
-                    }
-                })
-                const body = await response.json()
-                if(body.error)
-                    msg.setError(body.error)
-                else if("key" in body)
-                    setKey(body.key)
-            }
-            catch(err) {
-                console.log(err)
-                msg.setError("could not fetch key.")
-            }
+            const responseBody = sessionApi.get({
+                url:'/key',
+                token:user.token,
+                expectedProperties:[["key","protected"]]
+            })
+            if(responseBody?.key)
+                setKey(responseBody.key)
         }
-
-        fetchKey()
-    },[])
-    return {key}
+        if(user.token)
+            fetchKey()
+    },[user.token])
+    return key
 }
 
-const Code = ({session,user,msg}) => {
-    const sessionKey = useKey(`/api/vote/${user.nickname}/${session}/key`,user.token,msg)
+const Code = ({sessionApi}) => {
+    const sessionKey = useKey({sessionApi})
     
-    return <h4 className="title is-4"> Code to vote: {sessionKey.key} </h4>
+    if(sessionKey)
+        return (
+            <div className="container code">
+                <div>
+                    <h3 className="centered"><b>Kode</b></h3>
+                    <h1><b className="key">{sessionKey}</b></h1>
+                </div> 
+            </div>
+        )
+    else
+        return null
 }
 
 export default Code

@@ -11,10 +11,10 @@ export async function POST(request, { params }) {
             await dbConnect()
             const user = await User.findOne({ _id: decodedToken.id })
             if(user && user.nickname === params.organiser) {
-                const token = getNewVotingToken({organiser: params.organiser, session: params.session})
+                const token = getNewVotingToken({organiser: params.organiser, sessionId: params.sessionId})
                 return NextResponse.json({ token }, {status: 200})
             }
-            return NextResponse.json({ error: "user token not sufficient for voting rights." }, {status: 401})
+            return NextResponse.json({ info: "user token not sufficient for voting rights."}, {status: 200})
         }
         catch(err) {
             console.log(err)

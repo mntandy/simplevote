@@ -1,9 +1,7 @@
-import Navbar from "@/app/components/Navbar"
-import 'bulma/css/bulma.min.css'
 const Page = () => {
   return (
     <div className="container">
-      <Navbar/>
+      Nothing to see here. Add "/user" to the url.
     </div>
   )
 }

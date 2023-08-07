@@ -1,11 +1,13 @@
 'use client'
-import { useRef } from "react"
+import { useRef, useContext } from "react"
+import { UserContext } from '@/app/contexts'
 
-export default function Login ({user,toggleNewUser=null}) {
+const Login = ({toggleNewUser=null}) => {
     const inputEmail = useRef(null)   
     const inputPassword = useRef(null)
+    const user = useContext(UserContext)
 
-    const handleLogin = (event) => {
+    const handleLogin = () => {
         user.login({
             email:inputEmail.current.value,
             password:inputPassword.current.value
@@ -13,29 +15,25 @@ export default function Login ({user,toggleNewUser=null}) {
     }
     return (
         <div className="container">
-            <div className="column is-half is-offset-one-quarter">
-            <div className="field">
-                <label className="label">Email</label>
-                <input className="input" type="email" placeholder="Email input"
+            <div>
+            <label>
+                Email
+                <input type="email" placeholder="Email"
                 autoComplete="on" ref={inputEmail}/>
-            </div>
-            <div className="field">
-                <label className="label">Password</label>
-                <input className="input" type="password" placeholder="Password"
+            </label>
+            <label>
+                Password
+                <input type="password" placeholder="Password"
                     autoComplete="on" ref={inputPassword}/>
+            </label>
+            <div className="right-aligned small-width">
+            <button className="button" onClick={handleLogin}>Log in</button>
             </div>
-        <div className="field is-grouped">
-            <div className="control">
-                <button className="button is-link" onClick={handleLogin}>Log in</button>
+            {toggleNewUser!==null &&
+                <button className="button is-link is-light" onClick={toggleNewUser}>Register a new user</button>}
             </div>
-            <div className="control">
-                <button className="button is-link is-light" onClick={(event) => {}}>Cancel</button>
-            </div>
-            {toggleNewUser!==null && <div className="control">
-                <button className="button is-link is-light" onClick={toggleNewUser}>Register a new user</button>
-            </div>}
         </div>
-        </div>
-    </div>
     )
 }
+
+export default Login

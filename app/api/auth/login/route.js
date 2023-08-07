@@ -6,7 +6,6 @@ import { getNewUserToken } from '@/app/utils/token'
 
 export async function POST(req) {
     const { email, password } = await req.json()
-    let result = null
     
     if(!email || !password)
         return NextResponse.json({ error: 'Invalid username or password' }, { status: 401 })

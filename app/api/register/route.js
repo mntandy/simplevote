@@ -3,6 +3,7 @@ import dbConnect from '@/app/lib/dbConnect'
 import User from '@/app/models/user'
 import bcrypt from 'bcrypt'
 import { getNewUserToken } from '@/app/utils/token'
+import errorResponse from '@/app/lib/errorResponse'
 
 export async function POST(req) {
     const body = await req.json()
@@ -12,12 +13,14 @@ export async function POST(req) {
 
     const existingUser = await User.find({$or: [{email: body.email},{nickname: body.nickname}]},{_id: 0, password: 0, __v: 0}).exec()
     if(existingUser.length) {
-        result = existingUser.reduce((col,next) => {
-            if(next.email===body.email)
-                return {...col,emailExists: true}
-            else if (next.nickname===body.nickname)
-                return {...col,nicknameExists: true}
-        },{})
+        return NextResponse.json(
+            existingUser.reduce((col,next) => 
+            (next.email===body.email) 
+            ? ({...col,emailExists: true}) 
+            : ((next.nickname===body.nickname)
+            ? ({...col,nicknameExists: true})
+            : col)
+            ,{}), {status: 400})
     }
     else {
         const saltRounds = 10
@@ -27,10 +30,8 @@ export async function POST(req) {
             passwordHash: passwordHash,
             nickname: body.nickname,
         })
-        console.log(JSON.stringify(user))
         try {
             result = (await user.save())._doc
-            console.log(result)
             const token = getNewUserToken(
                 {
                     email: user.email,
@@ -39,8 +40,8 @@ export async function POST(req) {
             return NextResponse.json({ token, email: user.email, nickname: user.nickname }, {status: 200})
         }
         catch(err) {
-            result = {...err}
+            console.log(err)
+            return errorResponse(err)
         }
     }
-    return NextResponse.json({result},{status: 400})
 }

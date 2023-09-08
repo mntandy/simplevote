@@ -1,19 +1,17 @@
-'use client'
-
-import AdminNavbar from '@/app/components/AdminNavbar'
+import Navbar from '@/app/components/Navbar'
 import Message from "@/app/components/Message"
 
-const Layout = ( {children,organiser=null,user=null}) => {
+const Layout = ( {children}) => {
     return (
-        <div>
-            {<AdminNavbar/>}
-            <Message/>
+        <>
+            <Navbar/>
             <div className="centered">
                 <div>
+                    <Message/>
                     {children}
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 

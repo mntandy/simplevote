@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export default function RequestKey({submitKey}) {
+const RequestKey = ({submitKey}) => {
     const [key,setKey] = useState("")
 
     const handleSubmitKey = () => submitKey({key}) 
@@ -18,3 +18,5 @@ export default function RequestKey({submitKey}) {
         </div>
     </div>)
 }
+
+export default RequestKey

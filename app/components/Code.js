@@ -1,29 +1,8 @@
 
-import { useEffect, useState, useContext } from "react"
-import { UserContext } from '@/app/contexts'
+import { getSessionKey } from "@/app/lib/server/votingSession"
 
-const useKey = ({sessionApi}) => {
-    const [key, setKey] = useState(null)
-    const user = useContext(UserContext)
-
-    useEffect(() => {
-        const fetchKey = async () => {
-            const responseBody = sessionApi.get({
-                url:'/key',
-                token:user.token,
-                expectedProperties:[["key","protected"]]
-            })
-            if(responseBody?.key)
-                setKey(responseBody.key)
-        }
-        if(user.token)
-            fetchKey()
-    },[user.token])
-    return key
-}
-
-const Code = ({sessionApi}) => {
-    const sessionKey = useKey({sessionApi})
+const Code = async ({organiser,sessionId}) => {
+    const sessionKey = await getSessionKey(sessionId)
     
     if(sessionKey)
         return (

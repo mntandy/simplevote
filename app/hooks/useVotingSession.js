@@ -5,28 +5,29 @@ import { useState, useEffect } from "react"
 import useCountdown from '@/app/hooks/useCountdown'
 import useInterval from '@/app/hooks/useInterval'
 import useVotingToken from '@/app/hooks/useVotingToken'
+import { fetchVotingSession } from "../lib/client/apiCalls"
+import { tryAndCatch } from "../lib/client/errorHandling"
 
-const useVotingSession = ({sessionId,sessionApi,autoRefresh}) => {
+const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
     const [description,setDescription] = useState("")
     const [options,setOptions] = useState([])
+    const [previousVote,setPreviousVote] = useState(null)
     const refreshTimer = useInterval()
-    const {ownVote,votingToken,requestKey,submitKey,submitVote} = useVotingToken({sessionId,sessionApi})
+    const {votingToken,requestKey,submitKey,submitVote} = useVotingToken({sessionId,organiser})
     const {timeleft, expired, initialiseCountdown} = useCountdown()
     
     const fetchInfo = async () => {
-        const responseBody = await sessionApi.get({
-            token:votingToken,
-            expectedProperties:["description","options"]
-        })
-        if (responseBody?.description)
+        const responseBody = await tryAndCatch(fetchVotingSession,{organiser,sessionId,token:votingToken})
+        if(responseBody) {
             setDescription(responseBody.description)
-        if (responseBody?.options)
             setOptions(responseBody.options)
-        if (!timeleft && !expired && responseBody?.expiration)
-            initialiseCountdown(new Date(responseBody.expiration))
+            setPreviousVote(responseBody?.previousVote ?? null)
+            if (!timeleft && !expired && responseBody?.expiration)
+                initialiseCountdown(new Date(responseBody.expiration))
+        }
     }
 
-    const handleVote = (id) => () => submitVote(id)
+    const handleVote = (id) => async () => submitVote(id)
 
     useEffect(() => {
         if(autoRefresh)
@@ -41,7 +42,11 @@ const useVotingSession = ({sessionId,sessionApi,autoRefresh}) => {
         }
     },[votingToken])
 
-    return {ownVote,options,description,timeleft,handleVote,submitKey,requestKey}
+    useEffect(() => {
+        console.log(previousVote)
+    },[previousVote])
+
+    return {previousVote,options,description,timeleft,handleVote,submitKey,requestKey}
 }
 
 export default useVotingSession

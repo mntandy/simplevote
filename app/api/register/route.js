@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import dbConnect from '@/app/lib/dbConnect'
 import User from '@/app/models/user'
 import bcrypt from 'bcrypt'
-import { getNewUserToken } from '@/app/utils/token'
 import errorResponse from '@/app/lib/errorResponse'
 
 export async function POST(req) {
@@ -32,12 +31,7 @@ export async function POST(req) {
         })
         try {
             result = (await user.save())._doc
-            const token = getNewUserToken(
-                {
-                    email: user.email,
-                    id: user.id,
-                })
-            return NextResponse.json({ token, email: user.email, nickname: user.nickname }, {status: 200})
+            return NextResponse.json({ email: user.email, nickname: user.nickname }, {status: 200})
         }
         catch(err) {
             console.log(err)

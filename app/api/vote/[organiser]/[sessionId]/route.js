@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import dbConnect from '@/app/lib/dbConnect'
 import User from '@/app/models/user'
-import { decodeVotingToken, decodeUserToken, verifyTokenFromHeader, getNewVotingToken } from '@/app/utils/token'
+import { decodeVotingToken, verifyTokenFromHeader, getNewVotingToken } from '@/app/utils/token'
 import errorResponse from '@/app/lib/errorResponse'
+import { getAuthSession } from '@/app/lib/server/authSession'
 
 const getVotingSession = async ({nickname,sessionId}) => {
     await dbConnect()
@@ -21,10 +22,9 @@ export async function GET(request, { params }) {
         return NextResponse.json({ error: decodedToken.error },(decodedToken.status ? { status: decodedToken.status} : null))
 
     const session = await getVotingSession({nickname:params.organiser,sessionId:params.sessionId})
-
     if(session) {
         session.options.sort((a,b)=> a.votes<b.votes ? 1 : (a.votes>b.votes ? -1 : 0))
-        return NextResponse.json(session)
+        return NextResponse.json({...session._doc,key:undefined,previousVote:decodedToken?.previous ?? null})
     }
     return NextResponse.json({error: "Voting session not found"},{status: 400})
 }
@@ -52,6 +52,7 @@ const updateVote = async (nickname,sessionId,optionId,change) => {
 
 export async function POST(request, { params }) {
     const { id } = await request.json()
+    console.log("id: " + id)
     let decodedToken = null
     try {
         decodedToken = await verifyTokenFromHeader(request)
@@ -83,12 +84,9 @@ export async function POST(request, { params }) {
 
 export async function DELETE(request, { params }) {
     try {
-        let decodedToken = await decodeUserToken({request})
-        if(decodedToken.error)
-            return NextResponse.json({ error: decodedToken.error },(decodedToken.status ? { status: decodedToken.status} : null))
-
+        const session = await getAuthSession()
         await dbConnect()
-        const user = await User.findById(decodedToken.id)
+        const user = await User.findById(session.user.id)
         if(!user || user.nickname !== params.organiser)
             return NextResponse.json({ error: 'access-token invalid' },{ status: 401})
     
@@ -97,7 +95,6 @@ export async function DELETE(request, { params }) {
         return NextResponse.json({ok:"Ok"})
     }
     catch(err) {
-        console.log(err)
         return errorResponse(err)
     }
 }

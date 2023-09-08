@@ -1,4 +1,3 @@
-'use client'
 
 const Sessions = ({sessions,organiser}) => {
     const Session = ({e}) =>

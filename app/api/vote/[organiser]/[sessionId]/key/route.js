@@ -1,22 +1,8 @@
 import { NextResponse } from 'next/server'
 import dbConnect from '@/app/lib/dbConnect'
 import User from '@/app/models/user'
-import { decodeUserToken,getNewVotingToken } from '@/app/utils/token'
-
-export async function GET(request, { params }) {
-    const decodedToken = await decodeUserToken({request})
-    if(decodedToken.error)
-        return NextResponse.json({ error: decodedToken.error },(decodedToken.status ? { status: decodedToken.status} : null))
-    
-    await dbConnect()
-
-    const user = await User.findOne({ _id: decodedToken.id }).select({"sessions": { $elemMatch: { _id: params.sessionId }}})
-    if(user!==null && Array.isArray(user.sessions) && user.sessions.length)
-        return NextResponse.json((user.sessions[0].protected ? { key: user.sessions[0].key } : { protected: false }))
-    else
-        return NextResponse.json({ error: "Something is wrong with the user token."}, { status: 401})
-       
-}   
+import { getNewVotingToken } from '@/app/utils/token'
+import { getAuthSession } from '@/app/lib/server/authSession'
 
 export async function POST(req,{ params }) {
     const { key } = await req.json()

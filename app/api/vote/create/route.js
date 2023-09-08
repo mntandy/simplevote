@@ -1,21 +1,22 @@
 import { NextResponse } from 'next/server'
 import dbConnect from '@/app/lib/dbConnect'
 import User from '@/app/models/user'
-import { decodeUserToken } from '@/app/utils/token'
+import { getAuthSession } from '@/app/lib/server/authSession'
 import errorResponse from '@/app/lib/errorResponse'
 
 export async function POST(request) {
     const body = await request.json()
     try {
-        const decodedToken = await decodeUserToken({request})
-        if(decodedToken.error)
-            return NextResponse.json({ error: decodedToken.error },(decodedToken.status ? { status: decodedToken.status} : null))
+        const authSession = await getAuthSession()
+        
+        if(!authSession)
+            return NextResponse.json({ error: "Not logged in"},{ status: 401})
 
         await dbConnect()
 
-        const user = await User.findById(decodedToken.id)
+        const user = await User.findById(authSession.user.id)
         if(!user)
-            return NextResponse.json({ error: 'access-token invalid' },{ status: 401})
+            return NextResponse.json({ error: 'Invalid user' },{ status: 401})
     
         await user.sessions.push({
             protected: body.protected,

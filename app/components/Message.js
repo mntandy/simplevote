@@ -1,19 +1,32 @@
 'use client'
 
-import { useContext } from 'react'
-import { MessageContext } from "@/app/contexts"
+export const reset = () => {
+    const e = document.getElementById("msgDiv")
+    if(e) 
+        e.style.display="none"
+    const m = document.getElementById("msgText")
+    if(m)
+        m.innerHTML=""
+}
+
+export const display = (txt) => {
+    const e = document.getElementById("msgDiv")
+    if(e)
+        e.style.display=""
+    const m = document.getElementById("msgText")
+    if(m)
+        m.innerHTML=txt
+}
 
 const Message = () => {
-    const msg = useContext(MessageContext)
-    if(msg.text) return (
+    return (
         <div className="centered">
-        <div className="container message">
-            <div className="message-text">{msg.text}</div>
-            <button className="close-button" onClick={(event) => msg.reset()}><div className="close-div"/></button>
+        <div className="container message" id="msgDiv" style={{display: "none"}}>
+            <div className="message-text" id="msgText"></div>
+            <button className="close-button" onClick={(event) => reset()}><div className="close-div"/></button>
         </div>
         </div>
         )
-    return null
 }
 
 export default Message 

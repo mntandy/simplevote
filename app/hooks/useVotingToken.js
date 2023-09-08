@@ -1,57 +1,36 @@
 'use client'
 
-import { useEffect, useState, useContext } from "react"
-import { UserContext } from '@/app/contexts'
+import { useEffect, useState } from "react"
+import { fetchVotingRightsWithKey, fetchVotingTokenWithKey, postVote } from "@/app/lib/client/apiCalls"
+import { tryAndCatch } from "../lib/client/errorHandling"
 
-import useOwnVote from '@/app/hooks/useOwnVote'
-
-const useVotingToken = ({sessionId,sessionApi}) => {
+const useVotingToken = ({organiser,sessionId}) => {
     const [value,setValue] = useState(null)
     const [requestKey,setRequestKey] = useState(false)
-    const ownVote = useOwnVote({votingToken:value,sessionApi})
-    const user = useContext(UserContext)
+    
     const save = (t) => {
         setValue(t)
         localStorage.setItem("vote4it"+sessionId,t)
     }
 
-    const checkUserToken = async () => {
-        const responseBody = await sessionApi.post({url:"/user",requestBody: {userToken:user.token}})
-        if(responseBody?.token)
-            save(responseBody.token)
-    }
-
     const submitKey = async ({key}) => {
-        const responseBody = await sessionApi.post({
-            url:"/key",
-            requestBody: {key},
-            expectedProperties:["token"]
-        })
-        if(responseBody?.token)
-            save(responseBody.token)
+        const newVotingToken = await tryAndCatch(fetchVotingTokenWithKey,{organiser,sessionId,key})
+        if(newVotingToken)
+            save(newVotingToken)
     }
-
+    
     const checkVotingRights = async () => {
-        const responseBody = await sessionApi.get({
-            url:"/token",
-            expectedProperties:[["protected","token"]]
-        })
-        if(responseBody?.protected) {
-                setRequestKey(true)
-                if(user.token)
-                    checkUserToken()
-        }
+        const responseBody = await tryAndCatch(fetchVotingRightsWithKey,{organiser,sessionId})
+        if(responseBody?.protected)
+            setRequestKey(true)
         else if(responseBody?.token)
             save(responseBody.token)
     }
 
     const submitVote = async (id) => {
-        const responseBody = await sessionApi.post({
-            token:value,requestBody:{ id },
-            expectedProperties:[["token"]]
-        })
-        if(responseBody?.token)
-            save(responseBody.token)
+        const newVotingToken = await tryAndCatch(postVote,{organiser,sessionId,token:value,id})
+        if(newVotingToken)
+            save(newVotingToken)
     }
 
     useEffect(() => {
@@ -63,16 +42,11 @@ const useVotingToken = ({sessionId,sessionApi}) => {
     },[])
 
     useEffect(() => {
-        if(!value && user.token)
-            checkUserToken()
-    },[user.token])
-
-    useEffect(() => {
         if(value) 
             setRequestKey(false)
     },[value])
 
-    return {votingToken:value,requestKey,submitKey,submitVote,ownVote}
+    return {votingToken:value,requestKey,submitKey,submitVote}
 }
 
 export default useVotingToken

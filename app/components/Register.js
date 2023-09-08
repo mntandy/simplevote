@@ -1,9 +1,8 @@
 'use client'
-import { useState, useContext } from "react"
-import { MessageContext } from '@/app/contexts'
+import { useState } from "react"
+import { display } from "./Message"
 
 export default function Register() {
-    const msg = useContext(MessageContext)
     const [nickname, setNickname] = useState('')
     const [email, setEmail] = useState('')   
     const [password, setPassword] = useState('')
@@ -36,13 +35,12 @@ export default function Register() {
                 if(body.nicknameExists) setNicknameError("This username is unavailable")
                 if(!body.emailExists && !body.nicknameExists &&
                     body.email && body.nickname) {
-                    msg.setSucess("Registration of " + body.email + " with nickname " + body.nickname + " was successful!")
+                    display("Registration of " + body.email + " with nickname " + body.nickname + " was successful!")
                     reset()
                 }
             }
             catch (exception) {
-                console.log(exception)
-                msg.setError("Error registering user.")
+                display("Error registering user.")
             }
         }
     }

@@ -18,13 +18,6 @@ const verifyToken = async (token) => {
     return await jwt.verify(token, process.env.SECRET)
 }
 
-const getNewUserToken = (input) => {
-    return jwt.sign(
-        input,
-        process.env.SECRET,
-        { expiresIn: 60*60 })
-}
-
 const getNewVotingToken = (input) => {
     return jwt.sign(
         input,
@@ -36,11 +29,17 @@ const decodeUserToken = async ({request}) => {
 }
 
 const decodeVotingToken = async ({request,sessionId,organiser}) => {
-    const votingToken = await verifyTokenFromHeader(request)
-    if (votingToken.sessionId===sessionId && votingToken.organiser===organiser)
-        return votingToken
-    return { error: 'something is wrong with the voting token.', status: 400}
+    try {
+        const votingToken = await verifyTokenFromHeader(request)
+        if (votingToken.sessionId===sessionId && votingToken.organiser===organiser)
+            return votingToken
+        return { error: 'something is wrong with the voting token.', status: 400}
+    }
+    catch (err) {
+        console.log(err)
+        return { error: 'something is wrong with the voting token.', status: 400}
+    }
 }
 
-export { decodeVotingToken, verifyTokenFromHeader, decodeUserToken, getNewUserToken, getNewVotingToken, verifyToken }
+export { decodeVotingToken, verifyTokenFromHeader, decodeUserToken, getNewVotingToken, verifyToken }
 

@@ -1,42 +1,37 @@
 body {
     background-color: rgb(215, 215, 215);
     font-family: Sanchez;
-}
-
-nav {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-    background-color: black;
-}
-
-.nav-left {
-    color: black;
-    justify-self: center;
-    align-self: start;
-}
-
-.nav-center {
-    padding: 1em;
-    color: black;
-    justify-self: center;
-    align-self: center;
-}
-.nav-right {
-    padding: 1em;
-    color: black;
-    justify-self: end;
-    align-self: start;
-}
-
-.nav-a {
-    text-decoration: none;  
+    margin: 0px;
 }
 
 .centered {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: minmax(auto,600px) auto auto;
+    gap: 20px;
+}
+
+.voting-grid-wrapper {
+    display: grid;
+    grid-template-columns: minmax(auto,600px) min-content min-content min-content;
+    column-gap: 10px;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.column {
+    flex-direction: column;
 }
 
 .right-aligned {
@@ -51,9 +46,22 @@ nav {
     justify-content: flex-start;
 }
 
+.centered-item {
+    align-self: center;
+}
 
+.left-margin {
+    margin-left: 20px;
+}
 .extra-padding {
     padding: 20px;
+}
+
+.fix-wrap {
+    overflow-wrap: anywhere;
+}
+.extra-gap {
+    row-gap: 20px;
 }
 
 .card {
@@ -79,6 +87,7 @@ nav {
 }
 
 .message {
+    padding: 5px;
     border: 2px solid rgb(232, 22, 47);
 }
 
@@ -92,15 +101,17 @@ nav {
 label,input{
     display:flex;
     flex-direction:column;
+    margin: 5px;
+}
+
+.label {    
+    font-weight:bold;
 }
 
 .svgbar {
     fill:rgb(22, 113, 232);
     stroke:rgb(22, 113, 232);
     stroke-width: 1px;
-}
-label {
-    font-size: 12px;
 }
 
 .small-width {
@@ -150,22 +161,20 @@ input:focus, textarea:focus {
     color: white;
     margin: 5px;
     padding: 15px;
-    border: 0;
+    border: 0px;
 }
 
-.voting-button {
-    font-family: serif;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 24px;
-    margin: 5px;
-    padding: 15px;
-    border: 0;
+.button:active {
+    transform: translateY(2px);
+    border-width: 3px;
 }
 
-.voted {
-    background-color: hsl(217, 71%, 53%);
-    color: white;
+.button:hover {
+    background-color: rgb(22, 113, 200);
+}
+
+.error {
+    color: red;
 }
 
 .session-button {
@@ -199,7 +208,18 @@ input:focus, textarea:focus {
     content: "\00d7";
 }
 
+.option {
+    font-weight: normal;
+}
 .radio {
     font-size:14;
     flex-direction:row;
+    align-items: center;
 }
+
+h1 {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+table td, table th { overflow-wrap: anywhere; }

@@ -3,6 +3,7 @@ import { verifyToken, getNewVotingToken } from '@/app/utils/token'
 import dbConnect from '@/app/lib/dbConnect'
 import User from '@/app/models/user'
 import mongoose from 'mongoose'
+import { checkAuthSessionForVotingRights } from '@/app/lib/server/votingSession'
 
 const isObjectIdValid = (id) => mongoose.Types.ObjectId.isValid(id)
 
@@ -15,7 +16,8 @@ export async function GET(request, { params }) {
         if(!user || !user.sessions.length)
             return NextResponse.json({ error: "no user or no session."})
         if(user.sessions[0].protected) {
-            return NextResponse.json({ protected: true })
+            const token = await checkAuthSessionForVotingRights({organiser: params.organiser,sessionId: params.sessionId})
+            return NextResponse.json((token ? ({ token }) : ({ protected: true })), {status: 200})
         }
         else {
             const token = getNewVotingToken({organiser: params.organiser, sessionId: params.sessionId})

@@ -52,7 +52,6 @@ const updateVote = async (nickname,sessionId,optionId,change) => {
 
 export async function POST(request, { params }) {
     const { id } = await request.json()
-    console.log("id: " + id)
     let decodedToken = null
     try {
         decodedToken = await verifyTokenFromHeader(request)

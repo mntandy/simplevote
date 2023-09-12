@@ -2,6 +2,17 @@ import jwt from 'jsonwebtoken'
 
 require('dotenv').config()
 
+const getTokenFromHeader = (req) => {
+    const authorization = new Headers(req.headers).get('authorization')
+    if (authorization && authorization.startsWith('Bearer '))    
+        return authorization.replace('Bearer ', '')
+    return null
+}
+
+const verifyTokenFromHeader = async (req) => {
+    return await jwt.verify(getTokenFromHeader(req), process.env.SECRET)
+}
+
 const verifyToken = async (token) => {
     return await jwt.verify(token, process.env.SECRET)
 }

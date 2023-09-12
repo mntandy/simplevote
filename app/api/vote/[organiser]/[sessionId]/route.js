@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import dbConnect from '@/app/lib/dbConnect'
 import User from '@/app/models/user'
-import { decodeVotingToken, verifyTokenFromHeader, getNewVotingToken } from '@/app/utils/token'
+import { decodeVotingToken, verifyTokenFromHeader, getNewVotingToken } from '@/app/lib/server/token'
 import errorResponse from '@/app/lib/errorResponse'
 import { getAuthSession } from '@/app/lib/server/authSession'
 

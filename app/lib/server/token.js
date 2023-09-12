@@ -1,18 +1,6 @@
 import jwt from 'jsonwebtoken'
-import { headers } from 'next/headers'
 
 require('dotenv').config()
-
-const getTokenFromHeader = (req) => {
-    const authorization = new Headers(req.headers).get('authorization')
-    if (authorization && authorization.startsWith('Bearer '))    
-        return authorization.replace('Bearer ', '')
-    return null
-}
-
-const verifyTokenFromHeader = async (req) => {
-    return await jwt.verify(getTokenFromHeader(req), process.env.SECRET)
-}
 
 const verifyToken = async (token) => {
     return await jwt.verify(token, process.env.SECRET)
@@ -22,10 +10,6 @@ const getNewVotingToken = (input) => {
     return jwt.sign(
         input,
         process.env.SECRET)
-}
-
-const decodeUserToken = async ({request}) => {
-        return await verifyTokenFromHeader(request)
 }
 
 const decodeVotingToken = async ({request,sessionId,organiser}) => {
@@ -41,5 +25,5 @@ const decodeVotingToken = async ({request,sessionId,organiser}) => {
     }
 }
 
-export { decodeVotingToken, verifyTokenFromHeader, decodeUserToken, getNewVotingToken, verifyToken }
+export { decodeVotingToken, verifyTokenFromHeader, getNewVotingToken, verifyToken }
 

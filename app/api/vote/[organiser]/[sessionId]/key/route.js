@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import dbConnect from '@/app/lib/dbConnect'
 import User from '@/app/models/user'
-import { getNewVotingToken } from '@/app/utils/token'
+import { getNewVotingToken } from '@/app/lib/server/token'
 import { getAuthSession } from '@/app/lib/server/authSession'
 
 export async function POST(req,{ params }) {

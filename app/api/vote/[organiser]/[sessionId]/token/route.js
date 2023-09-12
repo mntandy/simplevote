@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { verifyToken, getNewVotingToken } from '@/app/utils/token'
+import { verifyToken, getNewVotingToken } from '@/app/lib/server/token'
 import dbConnect from '@/app/lib/dbConnect'
 import User from '@/app/models/user'
 import mongoose from 'mongoose'

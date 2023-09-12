@@ -1,7 +1,7 @@
 
 import { getSessionKey } from "@/app/lib/server/votingSession"
 
-const Code = async ({organiser,sessionId}) => {
+const Code = async ({sessionId}) => {
     const sessionKey = await getSessionKey(sessionId)
     
     if(sessionKey)

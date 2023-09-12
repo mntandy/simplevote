@@ -3,6 +3,12 @@ import { useState, useEffect } from "react"
 import { submitNewSession, fetchVotingSessionForCopy } from "@/app/lib/client/apiCalls"
 import { tryAndCatch } from "../lib/client/errorHandling"
 
+const DisplayArrayAsList = ({arr}) =>
+    (Array.isArray(arr) && !!arr.length) ?
+        <label className="label">Current options
+            <ul>{arr.map(v => <li key={v} className="option">{v}</li>)}</ul>
+        </label> : null
+
 const CreateNewVote = ({ close, update, organiser, sessionId }) => {
 
     const initialForm = {
@@ -22,15 +28,18 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
         const fetchSession = async () => {
             const responseBody = await tryAndCatch(fetchVotingSessionForCopy, { organiser, sessionId })
             if (responseBody) {
-                setForm({ ...form, description: ("Copy of " + responseBody.description ?? ""), access: responseBody.protected ? "protected" : "", key: responseBody.key ?? "" })
+                setForm({
+                    ...form, 
+                    description: ("Copy of " + responseBody.description ?? ""), 
+                    access: responseBody.protected ? "protected" : "", 
+                    key: responseBody.key ?? "" 
+                })
                 setOptions([...(new Set(responseBody.options.map(e => e.description))).values()])
             }
         }
         if (organiser && sessionId)
             fetchSession()
     }, [sessionId])
-
-    const optionsAreOk = () => (Array.isArray(options) && !!options.length)
 
     const handleChange = ({ target }) => {
         setForm({ ...form, [target.name]: target.value })
@@ -72,6 +81,7 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
             }
         }
     }
+
     return (
         <div className="extra-padding">
             <label className="label">
@@ -86,19 +96,16 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
                 <textarea className="textarea has-fixed-size" rows="5" name="optionsInput" onChange={handleChange} value={form.optionsInput}></textarea></label>
             {optionsInfo && <p class="help is-danger">Please add some options by writing them in the textbox and clicking <i>add options</i></p>}
             <button className="button" onClick={handleAddOptions}>Add options</button>
-            {optionsAreOk() &&
-                <label className="label">Current options
-                    <ul>{options.map(v => <li key={v} className="option">{v}</li>)}</ul>
-                </label>}
+            <DisplayArrayAsList arr={options} />
             <label className="label">Status
                 <div className="left-aligned">
-                <label className="radio">
-                    <input type="radio" name="access" onChange={handleChange} value="public" checked={form.access === "public"} />
-                    Public
-                </label>
-                <label className="radio">
-                    <input type="radio" name="access" onChange={handleChange} value="protected" checked={form.access === "protected"} /> Protected
-                </label>
+                    <label className="radio">
+                        <input type="radio" name="access" onChange={handleChange} value="public" checked={form.access === "public"} />
+                        Public
+                    </label>
+                    <label className="radio">
+                        <input type="radio" name="access" onChange={handleChange} value="protected" checked={form.access === "protected"} /> Protected
+                    </label>
                 </div>
             </label>
             {form.access === "protected" &&

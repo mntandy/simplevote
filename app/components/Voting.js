@@ -1,15 +1,15 @@
 'use client'
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useReducer } from "react"
 import RequestKey from '@/app/components/RequestKey'
 import useVotingSession from '@/app/hooks/useVotingSession'
 import '@/app/css/Voting.css'
 
 const BarSvg = ({ votes, rowId }) => {
-    const [rowHeight, setRowHeight] = useState(15)
+    const [rowHeight, setRowHeight] = useReducer(() => document.getElementById(rowId).clientHeight,15)
 
     useEffect(() => {
-        setRowHeight(document.getElementById(rowId).clientHeight)
+        setRowHeight()
     }, [])
 
     return (

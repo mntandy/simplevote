@@ -6,7 +6,7 @@ const useInterval = () => {
     const [id,setId] = useState(null)
 
     useEffect(() => {
-        return () => clear()
+        return clear
     },[])
 
     const clear = () => {

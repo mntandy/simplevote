@@ -32,20 +32,20 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
     const DeleteButton = ({ e }) =>
     (<button style={{ VerticalAlign: "baseline" }} className="session-button">
         <img onClick={handleDelete(e.id)}
-            src="/trash-outline.svg" width="16" height="16" />
+            alt="delete session" src="/trash-outline.svg" width="16" height="16" />
     </button>)
 
     const CopyButton = ({ e }) =>
     (<button style={{ VerticalAlign: "baseline" }} className="session-button">
         <img onClick={handleCopy(e.id)}
-            src="/copy-svgrepo-com.svg" width="16" height="16" />
+            alt="make a copy of session" src="/copy-svgrepo-com.svg" width="16" height="16" />
     </button>)
 
 
     const EditButton = ({ e }) =>
     (<button style={{ VerticalAlign: "middle" }} className="session-button">
         <img onClick={() => { throw new Error("function is not implemented yet!") }}
-            src="/create-outline.svg" width="16" height="16" />
+            alt="edit session" src="/create-outline.svg" width="16" height="16" />
     </button>)
 
     const DisplaySessions = ({ arr, label }) =>

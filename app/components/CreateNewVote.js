@@ -28,30 +28,30 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
         const fetchSession = async () => {
             const responseBody = await tryAndCatch(fetchVotingSessionForCopy, { organiser, sessionId })
             if (responseBody) {
-                setForm({
-                    ...form, 
+                setForm(f => ({
+                    ...f, 
                     description: ("Copy of " + responseBody.description ?? ""), 
                     access: responseBody.protected ? "protected" : "", 
                     key: responseBody.key ?? "" 
-                })
+                }))
                 setOptions([...(new Set(responseBody.options.map(e => e.description))).values()])
             }
         }
         if (organiser && sessionId)
             fetchSession()
-    }, [sessionId])
+    }, [sessionId,organiser])
 
     const handleChange = ({ target }) => {
-        setForm({ ...form, [target.name]: target.value })
+        setForm(f => ({ ...f, [target.name]: target.value }))
     }
 
     const handleAddOptions = () => {
         setOptions([...(new Set([...options, ...form.optionsInput.split("\n").filter(e => e !== "")])).values()])
-        setForm({ ...form, optionsInput: "" })
+        setForm(f => ({ ...f, optionsInput: "" }))
     }
 
     const handleClearOptions = () => {
-        setForm({ ...form, options: [] })
+        setForm(f => ({ ...f, options: [] }))
     }
 
     const handleCancel = () => {
@@ -60,7 +60,7 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
     }
 
     const handleCreateSession = async () => {
-        if (!Array.isArray(arr) || !arr.length)
+        if (!Array.isArray(options) || !options.length)
             setOptionsInfo(true)
         else {
             const success = await tryAndCatch(submitNewSession, {

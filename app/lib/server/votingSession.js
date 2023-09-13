@@ -26,7 +26,6 @@ export const checkAuthSessionForVotingRights = async ({ organiser, sessionId }) 
         const user = await User.findOne({ _id: authSession.user.id })
         if (user && user.nickname === organiser) {
             const newToken = getNewVotingToken({ organiser, sessionId })
-            console.log("newToken:" + newToken)
             return newToken
         }
     }

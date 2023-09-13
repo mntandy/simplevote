@@ -42,10 +42,6 @@ const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
         }
     },[votingToken])
 
-    useEffect(() => {
-        console.log(previousVote)
-    },[previousVote])
-
     return {previousVote,options,description,timeleft,handleVote,submitKey,requestKey}
 }
 

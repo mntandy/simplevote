@@ -48,7 +48,7 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
             src="/create-outline.svg" width="16" height="16" />
     </button>)
 
-    const Sessions = ({ arr, label }) =>
+    const DisplaySessions = ({ arr, label }) =>
         (!Array.isArray(arr) || !arr.length) ?
             <p align="center">Could not find any {label} voting sessions...</p> :
             <div className="grid-wrapper">
@@ -65,9 +65,9 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
     return (
         <div>
             <h1 align="center"> Ongoing voting sessions </h1>
-            <Sessions arr={sessions.ongoing} label="ongoing" />
+            <DisplaySessions arr={sessions.ongoing} label="ongoing" />
             <h1 align="center"> Expired sessions </h1>
-            <Sessions arr={sessions.expired} label="expired" />
+            <DisplaySessions arr={sessions.expired} label="expired" />
             <div className="centered extra-padding">
                 <button className="button" onClick={() => setDisplayCNS(true)}>Create new voting session</button>
             </div>

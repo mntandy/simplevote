@@ -58,7 +58,6 @@ export const fetchVotingSession = async ({organiser,sessionId,token}) => {
         headers: headerWithOrWithoutToken(token)
     })
     const responseBody = await response.json()
-    console.log(responseBody)
     checkResponseForErrors({
         responseBody,
         expectedProperties:["description","options"]})

@@ -60,7 +60,7 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
     }
 
     const handleCreateSession = async () => {
-        if (!optionsAreOk())
+        if (!Array.isArray(arr) || !arr.length)
             setOptionsInfo(true)
         else {
             const success = await tryAndCatch(submitNewSession, {

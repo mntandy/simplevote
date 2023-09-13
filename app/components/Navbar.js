@@ -11,7 +11,7 @@ const Navbar = async () => {
         </div>
         <div className="nav-center">
             <a className="nav-a" href="https://www.jammin.no">
-                <img src="/Jammin+Liten.jpg" height="50" alt="Logo"/>
+                <img src="/public/logo.jpg" height="50" alt="Logo"/>
             </a>
         </div>
         <div className="nav-right">

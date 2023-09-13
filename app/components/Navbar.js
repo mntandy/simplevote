@@ -4,8 +4,7 @@ import { getAuthSession } from '../lib/server/authSession'
 import '@/app/css/Navbar.css'
 
 const Navbar = async () => {
-    //const session = await getAuthSession()
-    const session = null
+    const session = await getAuthSession()
     return (
     <nav>
         <div className="nav-left">

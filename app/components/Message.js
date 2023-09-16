@@ -20,7 +20,7 @@ export const display = (txt) => {
 
 const Message = () => {
     return (
-        <div className="centered">
+        <div className="centered twentypxmargins">
         <div className="container message" id="msgDiv" style={{display: "none"}}>
             <div className="message-text" id="msgText"></div>
             <button className="close-button" onClick={(event) => reset()}><div className="close-div"/></button>

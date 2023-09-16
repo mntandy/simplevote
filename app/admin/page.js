@@ -1,9 +1,6 @@
-'use client'
-
 import Login from "@/app/components/Login"
 
-const Page = () => {
+const Page = async () => {
     return <Login/>
 }
-
 export default Page

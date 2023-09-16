@@ -4,15 +4,17 @@ body {
     margin: 0px;
 }
 
-.centered {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.twentypxmargins {
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 20px;
 }
 
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 .grid-wrapper {
     display: grid;
@@ -80,7 +82,7 @@ body {
     background-color: hsl(0, 0%, 93%);
     border-radius: 8px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    display: flex;
+    display: inline-flex;
     margin: 30px;
     justify-content: center;
     border: 1px solid;
@@ -96,6 +98,10 @@ body {
 }
 .code {
     border: 2px solid rgb(22, 113, 232);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 label,input{

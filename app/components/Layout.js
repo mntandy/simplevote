@@ -5,7 +5,7 @@ const Layout = ( {children}) => {
     return (
         <>
             <Navbar/>
-            <div className="centered">
+            <div className="centered twentypxmargins">
                 <div>
                     <Message/>
                     {children}

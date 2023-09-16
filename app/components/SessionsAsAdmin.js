@@ -68,7 +68,7 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
             <DisplaySessions arr={sessions.ongoing} label="ongoing" />
             <h1 align="center"> Expired sessions </h1>
             <DisplaySessions arr={sessions.expired} label="expired" />
-            <div className="centered extra-padding">
+            <div className="centered twentypxmargins extra-padding">
                 <button className="button" onClick={() => setDisplayCNS(true)}>Create new voting session</button>
             </div>
         </div>)

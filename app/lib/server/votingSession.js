@@ -8,7 +8,6 @@ export const getSessionKey = async ({ sessionId }) => {
     const authSession = await getAuthSession()
     if (authSession) {
         await dbConnect()
-
         const user = await User.findById(authSession.user.id).select({ "sessions": { $elemMatch: { _id: sessionId } } })
         return (
             (Array.isArray(user?.sessions)

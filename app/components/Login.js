@@ -1,7 +1,8 @@
 'use client'
 import { useRef, useState } from "react"
-import { signIn } from "next-auth/react"
+import { signIn, getSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
+
 
 const Login = ({toggleNewUser=null}) => {
     const inputEmail = useRef(null)   
@@ -19,8 +20,10 @@ const Login = ({toggleNewUser=null}) => {
             })
         if(result.error)
             setLoginError("Error with credentials.")
-        else
-            router.refresh()
+        else {
+            const authSession = await getSession()
+            router.push("/" + authSession.user.nickname)
+        }
     }
     return (
         <div className="container">

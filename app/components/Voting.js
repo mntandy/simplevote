@@ -67,7 +67,7 @@ const Voting = ({ sessionId, organiser }) => {
     else if (!votingSession.requestKey && !votingSession.description)
         return (<p>Loading...</p>)
     else return (
-        <div className="centered column extra-gap">
+        <div className="centered twentypxmargins column extra-gap">
             <h1 align="center">{votingSession.description}</h1>
             <Countdown timeleft={votingSession.timeleft} />
             <label className="radio label">

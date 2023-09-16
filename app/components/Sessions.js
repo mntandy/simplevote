@@ -7,7 +7,7 @@ const Sessions = ({sessions,organiser}) => {
     return (
         <>
             <h1 align="center"> Live sessions </h1>
-            <div className="centered">
+            <div className="centered twentypxmargins">
             {(!Array.isArray(sessions.ongoing) || !sessions.ongoing.length) && 
                 <>
                     <p>Could not find any ongoing voting sessions...</p> 

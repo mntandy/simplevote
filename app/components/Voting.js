@@ -3,10 +3,11 @@
 import React, { useState, useEffect, useReducer } from "react"
 import RequestKey from '@/app/components/RequestKey'
 import useVotingSession from '@/app/hooks/useVotingSession'
+import useCountdown from "@/app/hooks/useCountdown"
 import '@/app/css/Voting.css'
 
 const BarSvg = ({ votes, rowId }) => {
-    const [rowHeight, setRowHeight] = useReducer(() => document.getElementById(rowId).clientHeight,15)
+    const [rowHeight, setRowHeight] = useReducer(() => document.getElementById(rowId).clientHeight, 15)
 
     useEffect(() => {
         setRowHeight()
@@ -36,7 +37,8 @@ const Voting = ({ sessionId, organiser }) => {
     const [autoRefresh, toggleAutoRefresh] = useToggleState()
 
     const votingSession = useVotingSession({ sessionId, organiser, autoRefresh })
-    
+    const {timeleft} = useCountdown(votingSession.expiration)
+        
     const VoteButton = ({ e }) =>
         <button
             id={e.id}
@@ -45,13 +47,13 @@ const Voting = ({ sessionId, organiser }) => {
             Vote!
         </button>
 
-    const Options = ({ options }) =>
+    const Options = ({ options, info }) =>
         (!Array.isArray(options) || !options.length) ?
             <p align="center">Could not find anything to vote for...</p> :
             <div className="voting-grid-wrapper">
                 {options.map(e =>
                     <React.Fragment key={e.id}>
-                        <span className="centered-item fix-wrap">{e.description}</span>
+                        <span className="centered-item fix-wrap">{e.description} {e.id in info && <span className="voting-info"><br/>{info[e.id]}</span>}</span>
                         <span className="centered-item">
                             <VoteButton e={e} />
                         </span>
@@ -69,12 +71,12 @@ const Voting = ({ sessionId, organiser }) => {
     else return (
         <div className="centered twentypxmargins column extra-gap">
             <h1 align="center">{votingSession.description}</h1>
-            <Countdown timeleft={votingSession.timeleft} />
+            <Countdown timeleft={timeleft} />
             <label className="radio label">
                 <input type="checkbox" checked={autoRefresh} onChange={toggleAutoRefresh} />
                 Auto-refresh
             </label>
-            <Options options={votingSession.options} />
+            <Options options={votingSession.options} info={votingSession.info} />
 
         </div>
     )

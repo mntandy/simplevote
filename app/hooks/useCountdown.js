@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import useInterval from "@/app/hooks/useInterval"
 
-const useCountdown = () => {
+const useCountdown = (expiration) => {
     const [timeleft,setTimeleft] = useState(null)
     const interval = useInterval()
     const [expired,setExpired] = useState(null)
@@ -32,7 +32,14 @@ const useCountdown = () => {
         interval.set(() => update(d),500)
     }
 
-    return { timeleft, expired, initialiseCountdown }
+    useEffect(() => {
+        if (!timeleft && !expired && expiration)
+        initialiseCountdown(new Date(expiration))
+
+    },[expiration])
+
+
+    return { timeleft }
 
 }
 

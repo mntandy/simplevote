@@ -93,6 +93,10 @@ body {
     border: 2px solid rgb(232, 22, 47);
 }
 
+.voting-info {
+    color: red;
+}
+
 .key {
     color:rgb(22, 113, 232);
 }

@@ -28,9 +28,12 @@ const useVotingToken = ({organiser,sessionId}) => {
     }
 
     const submitVote = async (id) => {
-        const newVotingToken = await tryAndCatch(postVote,{organiser,sessionId,token:value,id})
-        if(newVotingToken)
-            save(newVotingToken)
+        const result = await tryAndCatch(postVote,{organiser,sessionId,token:value,id})
+        if(result?.token)
+            save(result.token)
+        if(result?.info)
+            return {info:result.info}
+        return null
     }
 
     useEffect(() => {

@@ -87,9 +87,9 @@ export const postVote = async ({organiser,sessionId,token,id}) => {
         expectedProperties:[["info","token"]]
     })
     if(responseBody.info)
-        return display(responseBody.info) || token
+        return {info: responseBody.info, token}
     else
-        return responseBody.token
+        return {token: responseBody.token}
 }
 
 export const fetchVotingTokenWithAuth = async () => {

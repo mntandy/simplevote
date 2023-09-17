@@ -5,16 +5,17 @@ const useInterval = () => {
 
     const [id,setId] = useState(null)
 
-    useEffect(() => {
-        return clear
-    },[])
-
     const clear = () => {
         if(id) {
             clearInterval(id)
             setId(null)
         }
     }
+
+    useEffect(() => {
+        return clear
+    },[])
+    
     const set = (f,interval) => {
         if(id)
             clearInterval(id)

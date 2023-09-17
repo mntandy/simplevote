@@ -23,6 +23,7 @@ export async function GET(request, { params }) {
 
     const session = await getVotingSession({nickname:params.organiser,sessionId:params.sessionId})
     if(session) {
+        console.log(decodedToken?.previous)
         session.options.sort((a,b)=> a.votes<b.votes ? 1 : (a.votes>b.votes ? -1 : 0))
         return NextResponse.json({...session._doc,key:undefined,previousVote:decodedToken?.previous ?? null})
     }

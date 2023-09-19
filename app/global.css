@@ -24,7 +24,7 @@ body {
 
 .voting-grid-wrapper {
     display: grid;
-    grid-template-columns: minmax(auto,600px) min-content min-content min-content;
+    grid-template-columns: minmax(auto,600px) min-content min-content max-content;
     column-gap: 10px;
 }
 

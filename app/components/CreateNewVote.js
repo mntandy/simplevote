@@ -14,6 +14,7 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
     const initialForm = {
         description: "",
         duration: "60",
+        maxVotes: "5",
         optionsInput: "",
         access: "protected",
         key: "",
@@ -31,6 +32,7 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
                 setForm(f => ({
                     ...f, 
                     description: ("Copy of " + responseBody.description ?? ""), 
+                    maxVotes: responseBody.maxVotes ?? "",
                     access: responseBody.protected ? "protected" : "", 
                     key: responseBody.key ?? "" 
                 }))
@@ -67,6 +69,7 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
                 session: {
                     description: form.description,
                     duration: form.duration,
+                    maxVotes: form.maxVotes,
                     options,
                     protected: (form.access === "protected"),
                     key: form.key
@@ -91,6 +94,10 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
             <label className="label">
                 Duration in minutes
                 <input className="input" type="number" name="duration" onChange={handleChange} value={form.duration} />
+            </label>
+            <label className="label">
+                Number of votes per user
+                <input className="input" type="number" name="maxVotes" onChange={handleChange} value={form.maxVotes} />
             </label>
             <label className="label">Add options (add multiple at once, separated by new-line)
                 <textarea className="textarea has-fixed-size" rows="5" name="optionsInput" onChange={handleChange} value={form.optionsInput}></textarea></label>

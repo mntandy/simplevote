@@ -7,11 +7,13 @@ import useVotingToken from '@/app/hooks/useVotingToken'
 import { fetchVotingSession } from "../lib/client/apiCalls"
 import { tryAndCatch } from "../lib/client/errorHandling"
 
+const arrToMap = (arr) => arr.reduce((acc, e) => acc.set(e, 1 + (acc.get(e) || 0)), new Map())
+
 const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
     const [description,setDescription] = useState("")
     const [options,setOptions] = useState([])
     const [info,setInfo] = useState({})
-    const [previousVote,setPreviousVote] = useState(null)
+    const [currentVotes,setCurrentVotes] = useState(new Map())
     const refreshTimer = useInterval()
     const [expiration,setExpiration] = useState(null)
     const {votingToken,requestKey,submitKey,submitVote} = useVotingToken({sessionId,organiser})
@@ -22,8 +24,8 @@ const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
         if(responseBody) {
             setDescription(responseBody.description)
             setOptions(responseBody.options)
-            if(responseBody?.previousVote)
-                setPreviousVote(responseBody.previousVote)
+            if(responseBody?.currentVotes)
+                setCurrentVotes(arrToMap(responseBody.currentVotes))
             if(responseBody?.expiration)
                 setExpiration(responseBody.expiration)
         }
@@ -34,8 +36,8 @@ const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
         refreshTimer.set(fetchData,3000)
     }
 
-    const handleVote = (id) => async () => {
-        const result = await submitVote(id)
+    const handleVote = (id,value) => async () => {
+        const result = await submitVote(id,value)
         if(result?.info) {
             if(id in info)
                 resetInfo()
@@ -45,11 +47,9 @@ const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
                 setInfo(temp)
             }
         }
+        else
+            resetInfo()
     }
-
-    useEffect(() => {
-        console.log(info)
-    },[info])
 
     useEffect(() => {
         if(autoRefresh)
@@ -66,7 +66,7 @@ const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
         }
     },[votingToken])
 
-    return {resetInfo,info,previousVote,options,description,handleVote,submitKey,requestKey,expiration}
+    return {resetInfo,info,currentVotes,options,description,handleVote,submitKey,requestKey,expiration}
 }
 
 export default useVotingSession

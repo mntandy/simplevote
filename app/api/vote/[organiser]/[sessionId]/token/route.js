@@ -35,7 +35,7 @@ export async function POST(request) {
     if (body.votingToken) {
         try {
             const decodedToken = await verifyToken(body.votingToken)
-            return NextResponse.json({ previousVote: decodedToken?.previous ?? null }, {status: 200})
+            return NextResponse.json({ currentVotes: decodedToken?.currentVotes ?? null }, {status: 200})
         }
         catch(err) {
             console.log(JSON.stringify(err))

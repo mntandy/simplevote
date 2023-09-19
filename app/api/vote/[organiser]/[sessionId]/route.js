@@ -23,9 +23,7 @@ export async function GET(request, { params }) {
 
     const session = await getVotingSession({nickname:params.organiser,sessionId:params.sessionId})
     if(session) {
-        console.log(decodedToken?.previous)
-        session.options.sort((a,b)=> a.votes<b.votes ? 1 : (a.votes>b.votes ? -1 : 0))
-        return NextResponse.json({...session._doc,key:undefined,previousVote:decodedToken?.previous ?? null})
+        return NextResponse.json({...session._doc,key:undefined,currentVotes:decodedToken?.currentVotes ?? null})
     }
     return NextResponse.json({error: "Voting session not found"},{status: 400})
 }
@@ -52,7 +50,7 @@ const updateVote = async (nickname,sessionId,optionId,change) => {
 }
 
 export async function POST(request, { params }) {
-    const { id } = await request.json()
+    const { id,upvote } = await request.json()
     let decodedToken = null
     try {
         decodedToken = await verifyTokenFromHeader(request)
@@ -64,21 +62,33 @@ export async function POST(request, { params }) {
         return NextResponse.json({ error: 'access-token missing' },{ status: 400})
     }
 
-    const {expiration} = await getVotingSession({nickname: params.organiser,sessionId:params.sessionId})
+    const {expiration,maxVotes} = await getVotingSession({nickname: params.organiser,sessionId:params.sessionId})
     if(expiration && new Date(expiration)<=Date.now())
         return NextResponse.json({error: "Voting session is closed."})
 
-    if(decodedToken.previous!==undefined && decodedToken.previous!==null) {
-        if(decodedToken.previous !== id) 
-            await updateVote(params.organiser,decodedToken.sessionId,decodedToken.previous,-1)
+    if(!upvote && decodedToken?.currentVotes && Array.isArray(decodedToken.currentVotes)) {
+        const i = decodedToken.currentVotes.indexOf(id)
+        if(i>=0) {
+            await updateVote(params.organiser,decodedToken.sessionId,id,-1)
+            decodedToken.currentVotes.splice(i,1)
+        }
         else
-            return NextResponse.json({info: "You have already voted for this option."})
-
+            return NextResponse.json({info: "You have to vote before you can unvote."})
+            
     }
-
-    await updateVote(params.organiser,decodedToken.sessionId,id,1)
+    else if(upvote) {
+        if(decodedToken?.currentVotes && decodedToken.currentVotes.length>=(+maxVotes || decodedToken.currentVotes.length))  
+            return NextResponse.json({info: "You're out of votes. Unvote something."})
+        else {
+            await updateVote(params.organiser,decodedToken.sessionId,id,1)
+            if(decodedToken?.currentVotes && Array.isArray(decodedToken.currentVotes)) 
+                decodedToken.currentVotes.push(id)
+            else
+                decodedToken.currentVotes = [id]
+        }
+    }
     return NextResponse.json({
-        token: getNewVotingToken({...decodedToken, previous: id})
+        token: getNewVotingToken({...decodedToken})
     })
 }
 

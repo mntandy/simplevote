@@ -4,6 +4,7 @@ import optionSchema from '@/app/models/option'
 const sessionSchema = new mongoose.Schema({
     description: String,
     duration: String,
+    maxVotes: String,
     key: String,
     protected: Boolean,
     expiration: Date,

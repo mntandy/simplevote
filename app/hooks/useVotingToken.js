@@ -27,8 +27,8 @@ const useVotingToken = ({organiser,sessionId}) => {
             save(responseBody.token)
     }
 
-    const submitVote = async (id) => {
-        const result = await tryAndCatch(postVote,{organiser,sessionId,token:value,id})
+    const submitVote = async (id,upvote) => {
+        const result = await tryAndCatch(postVote,{organiser,sessionId,token:value,upvote,id})
         if(result?.token)
             save(result.token)
         if(result?.info)

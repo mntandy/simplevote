@@ -22,6 +22,7 @@ export async function POST(request) {
             protected: body.protected,
             key: (body.protected && body.key),
             description: body.description,
+            maxVotes: body.maxVotes,
             expiration: ((body.duration && /^\d+$/.test(body.duration)) ? Date.now()+(Number(body.duration)*60000) : null),
             options: body.options.map(o => ({description: o, votes: 0}))
         })

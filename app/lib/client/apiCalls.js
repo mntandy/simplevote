@@ -65,9 +65,7 @@ export const fetchVotingSession = async ({organiser,sessionId,token}) => {
 }
 
 export const fetchVotingSessionForCopy = async ({organiser,sessionId}) => {
-    const response = await fetch(`/api/vote/${organiser}/${sessionId}/copy`, {
-        method: 'GET'
-    })
+    const response = await fetch(`/api/vote/${organiser}/${sessionId}/copy`)
     const responseBody = await response.json()
     checkResponseForErrors({
         responseBody,
@@ -75,11 +73,11 @@ export const fetchVotingSessionForCopy = async ({organiser,sessionId}) => {
     return responseBody
 }
 
-export const postVote = async ({organiser,sessionId,token,id}) => {
+export const postVote = async ({organiser,sessionId,token,id,upvote}) => {
     const response = await fetch(`/api/vote/${organiser}/${sessionId}`, {
         method: 'POST',
         headers: headerWithOrWithoutToken(token),
-        body: JSON.stringify({token,id})
+        body: JSON.stringify({token,id,upvote})
     })
     const responseBody = await response.json()
     checkResponseForErrors({

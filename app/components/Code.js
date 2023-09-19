@@ -9,7 +9,7 @@ const Code = async ({sessionId}) => {
             <div className="centered">
                 <div className="container code">
                     <div>
-                        <h3><b>Kode</b></h3>
+                        <h3><b>Voting Code</b></h3>
                         <h1><b className="key">{sessionKey}</b></h1>
                     </div> 
                 </div>

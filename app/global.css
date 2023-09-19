@@ -16,18 +16,6 @@ body {
     justify-content: center;
 }
 
-.grid-wrapper {
-    display: grid;
-    grid-template-columns: minmax(auto,600px) auto auto;
-    gap: 20px;
-}
-
-.voting-grid-wrapper {
-    display: grid;
-    grid-template-columns: minmax(auto,600px) min-content min-content max-content;
-    column-gap: 10px;
-}
-
 .row {
     flex-direction: row;
 }
@@ -71,6 +59,25 @@ body {
     transition: 0.3s;
     width: 40%;
     border-radius: 5px;
+}
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: minmax(auto,600px) auto auto;
+    gap: 20px;
+}
+
+.main-voting-grid {
+    display: grid;
+    grid-template-columns: minmax(auto,600px);
+    row-gap: 10px;
+}
+
+.voting-box {
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: auto auto;
 }
   
 .card:hover {

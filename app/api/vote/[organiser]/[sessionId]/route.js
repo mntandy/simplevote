@@ -20,7 +20,6 @@ export async function GET(request, { params }) {
     
     if(decodedToken.error)
         return NextResponse.json({ error: decodedToken.error },(decodedToken.status ? { status: decodedToken.status} : null))
-
     const session = await getVotingSession({nickname:params.organiser,sessionId:params.sessionId})
     if(session) {
         return NextResponse.json({...session._doc,key:undefined,currentVotes:decodedToken?.currentVotes ?? null})

@@ -32,7 +32,7 @@ const useToggleState = (initial) => {
     return [state, toggle]
 }
 
-const toSortedVotes = (options) => options.toSorted((a,b)=> a.votes<b.votes ? 1 : (a.votes>b.votes ? -1 : 0))
+const toSortedVotes = (options) => options.toSorted((a, b) => a.votes < b.votes ? 1 : (a.votes > b.votes ? -1 : 0))
 
 const Voting = ({ sessionId, organiser }) => {
 
@@ -60,18 +60,15 @@ const Voting = ({ sessionId, organiser }) => {
     const Options = ({ options, info }) =>
         (!Array.isArray(options) || !options.length) ?
             <p align="center">Could not find anything to vote for...</p> :
-            <div className="voting-grid-wrapper">
+            <div className="main-voting-grid">
                 {options.map(e =>
-                    <React.Fragment key={e.id}>
-                        <span className="centered-item fix-wrap">{e.description} {e.id in info && <span className="voting-info"><br />{info[e.id]}</span>}</span>
-                        <span className="centered-item">
+                    <div className="voting-box" key={e.id}>
+                        <div style={{ padding: "5px", gridColumn: "1 / 3", GridRow: "1 / 2" }}>{e.description} {e.id in info && <span className="voting-info"><br />{info[e.id]}</span>}</div>
+                        <div style={{ gridColumn: "2 / 3", GridRow: "2 / 3", textAlign: "right", whiteSpace: "nowrap" }} className="centered-item">
                             <UnvoteButton e={e} />
-                        </span>
-                        <span className="centered-item">
                             <VoteButton e={e} />
-                        </span>
-                        <span className="centered-item"> {"Total: " + e.votes}</span>
-                    </React.Fragment>)}
+                            {"Total: " + e.votes}</div>
+                    </div>)}
             </div>
     if (votingSession.requestKey)
         return (<RequestKey submitKey={votingSession.submitKey} />)
@@ -81,14 +78,14 @@ const Voting = ({ sessionId, organiser }) => {
         <div className="centered twentypxmargins column extra-gap">
             <h1 align="center">{votingSession.description}</h1>
             <Countdown timeleft={timeleft} />
-            <div style={{display: "flex"}}>
+            <div style={{ display: "flex" }}>
                 <label className="radio label">
                     <input type="checkbox" checked={autoRefresh} onChange={toggleAutoRefresh} />
                     Auto-refresh
                 </label>
                 <label className="radio label">
                     <input type="checkbox" checked={sort} onChange={toggleSort} />
-                    Sort by total votes
+                    Sort by most votes
                 </label>
             </div>
             <Options options={sort ? toSortedVotes(votingSession.options) : votingSession.options} info={votingSession.info} />

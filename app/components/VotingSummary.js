@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from "react"
+import RequestKey from '@/app/components/RequestKey'
 import useVotingSession from '@/app/hooks/useVotingSession'
 import useCountdown from "@/app/hooks/useCountdown"
 import '@/app/css/Voting.css'

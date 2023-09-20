@@ -32,8 +32,6 @@ const useToggleState = (initial) => {
     return [state, toggle]
 }
 
-const toSortedVotes = (options) => options.toSorted((a, b) => a.votes < b.votes ? 1 : (a.votes > b.votes ? -1 : 0))
-
 const Voting = ({ sessionId, organiser }) => {
 
     const [autoRefresh, toggleAutoRefresh] = useToggleState(false)
@@ -63,8 +61,11 @@ const Voting = ({ sessionId, organiser }) => {
             <div className="main-voting-grid">
                 {options.map(e =>
                     <div className="voting-box" key={e.id}>
-                        <div style={{ padding: "5px", gridColumn: "1 / 3", GridRow: "1 / 2" }}>{e.description} {e.id in info && <span className="voting-info"><br />{info[e.id]}</span>}</div>
-                        <div style={{ gridColumn: "2 / 3", GridRow: "2 / 3", textAlign: "right", whiteSpace: "nowrap" }} className="centered-item">
+                        <div style={{ width: "fit-content", padding: "5px" }}>
+                            {e.description}
+                            {e.id in info && <span className="voting-info"><br />{info[e.id]}</span>}
+                        </div>
+                        <div style={{ textAlign: "right", whiteSpace: "nowrap" }}>
                             <UnvoteButton e={e} />
                             <VoteButton e={e} />
                             {"Total: " + e.votes}</div>
@@ -88,7 +89,7 @@ const Voting = ({ sessionId, organiser }) => {
                     Sort by most votes
                 </label>
             </div>
-            <Options options={sort ? toSortedVotes(votingSession.options) : votingSession.options} info={votingSession.info} />
+            <Options options={sort ? votingSession.sortedOptions() : votingSession.options} info={votingSession.info} />
 
         </div>
     )

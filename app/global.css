@@ -7,7 +7,7 @@ body {
 .twentypxmargins {
     margin-left: 20px;
     margin-right: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .centered {
@@ -77,15 +77,28 @@ body {
     border-radius: 10px;
     padding: 10px;
     display: grid;
+    grid-template-columns: repeat(auto-fit, auto);
+}
+ 
+.main-summary-voting-grid {
+    display: grid;
+    grid-template-columns: minmax(auto,600px);
+    row-gap: 10px;
+}
+
+.summary-voting-box {
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    display: grid;
     grid-template-columns: auto auto;
 }
-  
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 .container {
-    padding: 20px;
+    padding: 10px;
     background-color: hsl(0, 0%, 93%);
     border-radius: 8px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);

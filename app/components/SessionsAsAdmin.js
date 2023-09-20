@@ -10,7 +10,7 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
     const [sessions, setSessions] = useState(votingSessions)
     const [displayCNS, setDisplayCNS] = useState(false)
     const [sessionForCopy, setSessionForCopy] = useState(null)
-    const Session = ({ e, organiser }) => (<a href={`/${organiser}/${e.id}`}>{e.description}</a>)
+    const Session = ({ e, organiser }) => (<>{e.description} <a href={`/${organiser}/${e.id}`}>{"[voting view]"}</a> <a href={`/${organiser}/${e.id}/summary`}>{"[summary view]"}</a></>)
 
     const updateVotingSessions = async () => {
         const updatedSessions = await tryAndCatch(fetchVotingSessions, { organiser })

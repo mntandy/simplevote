@@ -18,7 +18,9 @@ const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
     const [expiration,setExpiration] = useState(null)
     const {votingToken,requestKey,submitKey,submitVote} = useVotingToken({sessionId,organiser})
     const resetInfo = () => setInfo({})
-        
+    
+    const sortedOptions = () => options.toSorted((a, b) => a.votes < b.votes ? 1 : (a.votes > b.votes ? -1 : 0))
+
     const fetchData = async () => {
         const responseBody = await tryAndCatch(fetchVotingSession,{organiser,sessionId,token:votingToken})
         if(responseBody) {
@@ -66,7 +68,7 @@ const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
         }
     },[votingToken])
 
-    return {resetInfo,info,currentVotes,options,description,handleVote,submitKey,requestKey,expiration}
+    return {resetInfo,info,currentVotes,options,sortedOptions,description,handleVote,submitKey,requestKey,expiration}
 }
 
 export default useVotingSession

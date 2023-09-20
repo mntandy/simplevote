@@ -61,7 +61,7 @@
 }
 
 .summary-voting-box {
-    border: 2px solid black;
+    border: 1px solid rgb(250, 247, 247);
     border-radius: 10px;
     padding: 10px;
     display: grid;

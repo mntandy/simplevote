@@ -60,7 +60,7 @@ const Voting = ({ sessionId, organiser }) => {
             <p align="center">Could not find anything to vote for...</p> :
             <div className="main-voting-grid">
                 {options.map(e =>
-                    <div className="voting-box centered-aligned" key={e.id}>
+                    <div className="voting-box centered-align" key={e.id}>
                         <div className="voting-option">
                             {e.description}
                             {e.id in info && <span className="voting-info"><br />{info[e.id]}</span>}

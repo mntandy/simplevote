@@ -52,7 +52,7 @@ const Voting = ({ sessionId, organiser }) => {
             id={e.id + "vote"}
             className={"voting-button" + (votingSession.currentVotes.get(e.id) ? " voted" : "")}
             onClick={votingSession.handleVote(e.id, true)}>
-            {"Vote" + "!".repeat(votingSession.currentVotes.get(e.id))}
+            {"Vote"}
         </button>
 
     const Options = ({ options, info }) =>
@@ -60,15 +60,15 @@ const Voting = ({ sessionId, organiser }) => {
             <p align="center">Could not find anything to vote for...</p> :
             <div className="main-voting-grid">
                 {options.map(e =>
-                    <div className="voting-box" key={e.id}>
-                        <div style={{ width: "fit-content", padding: "5px" }}>
+                    <div className="voting-box centered-aligned" key={e.id}>
+                        <div className="voting-option">
                             {e.description}
                             {e.id in info && <span className="voting-info"><br />{info[e.id]}</span>}
                         </div>
-                        <div style={{ textAlign: "right", whiteSpace: "nowrap" }}>
+                        <div style={{ marginLeft: "auto", whiteSpace: "nowrap" }}>
                             <UnvoteButton e={e} />
                             <VoteButton e={e} />
-                            {"Total: " + e.votes}</div>
+                            {"You: " + (votingSession.currentVotes.get(e.id) ?? "0")}{" Total: " + e.votes}</div>
                     </div>)}
             </div>
     if (votingSession.requestKey)

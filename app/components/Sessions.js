@@ -11,7 +11,7 @@ const Sessions = ({sessions,organiser}) => {
             {(!Array.isArray(sessions.ongoing) || !sessions.ongoing.length) && 
                 <>
                     <p>Could not find any ongoing voting sessions...</p> 
-                    <p>If you are {organiser}, then you can <a href="/admin">log in to create a new voting session.</a></p>
+                    <p>If you are <i>{organiser}</i>, then you can <a href="/admin">log in to create a new voting session.</a></p>
                 </>}
             <div className="centered column">
                 {sessions.ongoing.map(e => 

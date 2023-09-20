@@ -1,6 +1,6 @@
 body {
     background-color: rgb(215, 215, 215);
-    font-family: Sanchez;
+    font-family: sans-serif;
     margin: 0px;
 }
 
@@ -14,6 +14,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.centered-align {
+    display: flex;
+    align-items: center;
 }
 
 .row {
@@ -66,33 +71,6 @@ body {
     gap: 20px;
 }
 
-.main-voting-grid {
-    display: grid;
-    grid-template-columns: minmax(auto,600px);
-    row-gap: 10px;
-}
-
-.voting-box {
-    border: 2px solid black;
-    border-radius: 10px;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, auto);
-}
- 
-.main-summary-voting-grid {
-    display: grid;
-    grid-template-columns: minmax(auto,600px);
-    row-gap: 10px;
-}
-
-.summary-voting-box {
-    border: 2px solid black;
-    border-radius: 10px;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: auto auto;
-}
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }

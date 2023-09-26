@@ -16,6 +16,8 @@ const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
     const [currentVotes,setCurrentVotes] = useState(new Map())
     const refreshTimer = useInterval()
     const [expiration,setExpiration] = useState(null)
+    const [maxVotes, setMaxVotes] = useState(null)
+    const [myVotes,setMyVotes] = useState(null)
     const {votingToken,requestKey,submitKey,submitVote} = useVotingToken({sessionId,organiser})
     const resetInfo = () => setInfo({})
     
@@ -26,8 +28,12 @@ const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
         if(responseBody) {
             setDescription(responseBody.description)
             setOptions(responseBody.options)
-            if(responseBody?.currentVotes)
+            if(responseBody?.maxVotes)
+                setMaxVotes(responseBody.maxVotes)
+            if(responseBody?.currentVotes && Array.isArray(responseBody.currentVotes)) {
+                setMyVotes(responseBody.currentVotes.length)
                 setCurrentVotes(arrToMap(responseBody.currentVotes))
+            }
             if(responseBody?.expiration)
                 setExpiration(responseBody.expiration)
         }
@@ -68,7 +74,7 @@ const useVotingSession = ({sessionId,organiser,autoRefresh}) => {
         }
     },[votingToken])
 
-    return {resetInfo,info,currentVotes,options,sortedOptions,description,handleVote,submitKey,requestKey,expiration}
+    return {maxVotes,myVotes,resetInfo,info,currentVotes,options,sortedOptions,description,handleVote,submitKey,requestKey,expiration}
 }
 
 export default useVotingSession

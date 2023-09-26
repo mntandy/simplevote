@@ -25,7 +25,7 @@ const Options = ({ options }) =>
             {options.map(e =>
                 <div className="summary-voting-box" key={e.id}>
                     <div style={{ padding: "1px", gridColumn: "1 / 2" }}>{e.description}</div>
-                    <div style={{ gridColumn: "2 / 3", textAlign: "right", whiteSpace: "nowrap" }} className="centered-item">
+                    <div style={{ gridColumn: "2 / 3", textAlign: "right", whiteSpace: "nowrap", alignSelf: "center"}}>
                         {"Total: " + e.votes}</div>
                 </div>)}
         </div>

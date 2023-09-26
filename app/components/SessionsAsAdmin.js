@@ -54,9 +54,9 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
             <div className="grid-wrapper">
                 {arr.map(e =>
                     <React.Fragment key={e.id}>
-                        <span className="centered-item fix-wrap"><Session organiser={organiser} e={e} /></span>
-                        <span className="centered-item left-margin"><CopyButton e={e} /></span>
-                        <span className="centered-item"><DeleteButton e={e} /></span>
+                        <span style={{alignSelf: "center", overflowWrap: "anywhere"}}><Session organiser={organiser} e={e} /></span>
+                        <span style={{alignSelf: "center", marginLeft: "20px"}}><CopyButton e={e} /></span>
+                        <span style={{alignSelf: "center"}}><DeleteButton e={e} /></span>
                     </React.Fragment>)}
             </div>
 

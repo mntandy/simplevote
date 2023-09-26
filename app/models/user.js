@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     passwordHash: String,
     nickname: String,
+    intro: String,
     sessions: [sessionSchema]
   }, {timestamps: true})
 

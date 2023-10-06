@@ -1,0 +1,81 @@
+.jammin-body {
+    background-color: rgb(215, 215, 215);
+    font-family: sans-serif;
+}
+
+.jammin-nav {
+    background-color: black;
+}
+
+.jammin-nav-left {
+    color: black;
+}
+
+.jammin-nav-center {
+    color: black;
+}
+
+.jammin-nav-right {
+    color: black;
+}
+
+.jammin-nav-a {
+    text-decoration: none;  
+}
+
+.jammin-voting-box {
+    border: 1px solid rgb(250, 247, 247);
+}
+
+.jammin-summary-voting-box {
+    border: 1px solid rgb(250, 247, 247);
+}
+
+.jammin-container {
+    border: 1px solid red;
+    background-color: hsl(0, 0%, 93%);
+}
+
+.jammin-voting-button {
+    font-size: 16px;
+    font-weight: 800;
+    margin: 2px;
+    cursor: pointer;
+    border: 2px solid rgb(77, 72, 37);
+    background: linear-gradient(to right, gold 30%, rgb(247, 240, 200) 20% 80%,  gold 70%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    overflow-wrap:normal;
+}   
+
+.jammin-voting-button-disactivated {
+    font-size: 16px;
+    font-weight: 800;
+    margin: 2px;
+    border: 2px solid rgb(215, 215, 215);
+    background: rgb(215, 215, 215);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    overflow-wrap:normal;
+}
+
+.jammin-voting-button:active {
+    transform: translateY(2px);
+}
+
+.jammin-voted {
+    border: 2px solid rgb(194, 174, 63);
+    
+}
+
+.jammin-voting-button-div {
+    margin: 3px;
+    background-color: rgb(77, 72, 37);
+    width: fit-content;
+}
+
+.jammin-voting-button-div-disactivated {
+    margin: 3px;
+    background-color: rgb(215, 215, 215);
+    width: fit-content;
+}

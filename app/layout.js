@@ -1,22 +1,21 @@
-import Layout from '@/app/components/Layout'
-import './global.css'
+import './css/standard.css'
+import './css/jammin.css'
+import './css/tags.css'
+import './css/common.css'
+import './css/global.css'
 
 export const metadata = {
-  title: 'Jammin',
-  description: 'Stem frem din favoritt',
+  title: 'SimplyVote',
+  description: 'Simply vote for something',
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body>
-      <Layout>
-          {children}
-      </Layout>
-      </body>
+        {children}
     </html>
   )
 }

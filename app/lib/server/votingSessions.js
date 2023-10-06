@@ -38,10 +38,4 @@ const getVotingSessions = async ({ organiser }) => {
     return { ongoing: transform(ongoing), expired: transform(expired) }
 }
 
-const getSessionsIntro = async ({ organiser }) => {
-    const user = await User.find({"nickname": organiser}).select({"intro": 1})
-    if(Array.isArray(user) && user.length>0)
-        return user[0].intro ?? null
-    else null
-}
-export { getVotingSessions, getSessionsIntro }
+export { getVotingSessions }

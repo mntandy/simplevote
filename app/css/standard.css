@@ -1,47 +1,12 @@
-body {
+.standard-body {
     background-color: rgb(215, 215, 215);
     font-family: sans-serif;
-    margin: 0px;
 }
 
 .twentypxmargins {
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 10px;
-}
-
-.centered {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.row {
-    flex-direction: row;
-}
-
-.column {
-    flex-direction: column;
-}
-
-.right-aligned {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.left-aligned {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.extra-padding {
-    padding: 20px;
-}
-
-.extra-gap {
-    row-gap: 20px;
 }
 
 .card {
@@ -59,22 +24,6 @@ body {
 
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-}
-
-.container {
-    padding: 10px;
-    background-color: hsl(0, 0%, 93%);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    display: inline-flex;
-    margin: 30px;
-    justify-content: center;
-    border: 1px solid;
-}
-
-.message {
-    padding: 5px;
-    border: 2px solid rgb(232, 22, 47);
 }
 
 .voting-info {
@@ -214,4 +163,63 @@ input:focus, textarea:focus {
 h1 {
     white-space: normal;
     overflow-wrap: anywhere;
+}
+
+
+.standard-nav {
+    background-color: blueviolet;
+}
+
+.standard-nav-left {
+    color: white;
+}
+
+.standard-nav-center {
+    color: black;
+}
+.standard-nav-right {
+    color: white;
+}
+
+.standard-nav-a {
+    text-decoration: none;  
+}
+
+.standard-container {
+    border: 1px solid red;
+    background-color: hsl(0, 0%, 93%);
+}
+
+.standard-voting-button {
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 20px;
+    margin: 5px;
+    padding: 10px;
+    border: 0px solid black;
+    background-color: rgb(52, 134, 249);
+    color: white;
+    overflow-wrap:normal;
+}
+
+.standard-voting-button-disactivated {
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 20px;
+    margin: 5px;
+    padding: 10px;
+    border: 0px solid black;
+    background-color: rgb(52, 134, 249);
+    color: white;
+    overflow-wrap:normal;
+}
+
+.standard-voting-button:active {
+    transform: translateY(2px);
+    border-width: 0px;
+}
+
+.standard-voted {
+    background-color: hsl(247, 91%, 36%);
+    color: white;
 }

@@ -5,24 +5,32 @@ import CreateNewVote from "@/app/components/CreateNewVote"
 import { fetchVotingSessions, deleteVotingSession } from '@/app/lib/client/apiCalls'
 import { tryAndCatch } from '../lib/client/errorHandling'
 import React from 'react'
+import { isNonEmptyArray } from '../lib/basicutils'
 
-const SessionsAsAdmin = ({ organiser, votingSessions }) => {
+const useVotingSessions = ({organiser,votingSessions}) => {
     const [sessions, setSessions] = useState(votingSessions)
-    const [displayCNS, setDisplayCNS] = useState(false)
-    const [sessionForCopy, setSessionForCopy] = useState(null)
-    const Session = ({ e, organiser }) => (<>{e.description} <a href={`/${organiser}/${e.id}`}>{"[voting view]"}</a> <a href={`/${organiser}/${e.id}/summary`}>{"[summary view]"}</a></>)
-
-    const updateVotingSessions = async () => {
+    
+    const updateSessions = async () => {
         const updatedSessions = await tryAndCatch(fetchVotingSessions, { organiser })
         if (updatedSessions)
             setSessions(updatedSessions)
     }
 
-    const handleDelete = (id) => async () => {
+    const deleteSession = async (id) => {
         const success = await tryAndCatch(deleteVotingSession, { organiser, id })
         if (success)
-            updateVotingSessions()
+            updateSessions()
     }
+
+    return {sessions,updateSessions,deleteSession}
+}
+const SessionsAsAdmin = ({ organiser, votingSessions }) => {
+    const {sessions,updateSessions,deleteSession} = useVotingSessions({organiser,votingSessions})
+    const [displayCNS, setDisplayCNS] = useState(false)
+    const [sessionForCopy, setSessionForCopy] = useState(null)
+    const Session = ({ e, organiser }) => (<>{e.description} <a href={`/${organiser}/${e.id}`}>{"[voting view]"}</a> <a href={`/${organiser}/${e.id}/summary`}>{"[summary view]"}</a></>)
+
+    const handleDelete = (id) => () => deleteSession(id)
 
     const handleCopy = (id) => () => {
         setSessionForCopy(id)
@@ -49,7 +57,7 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
     </button>)
 
     const DisplaySessions = ({ arr, label }) =>
-        (!Array.isArray(arr) || !arr.length) ?
+        !isNonEmptyArray(arr) ?
             <p align="center">Could not find any {label} voting sessions...</p> :
             <div className="grid-wrapper">
                 {arr.map(e =>
@@ -61,14 +69,14 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
             </div>
 
     if (displayCNS)
-        return <CreateNewVote update={updateVotingSessions} organiser={organiser} sessionId={sessionForCopy} close={() => setDisplayCNS(false)} />
+        return <CreateNewVote update={updateSessions} organiser={organiser} sessionId={sessionForCopy} close={() => setDisplayCNS(false)} />
     return (
         <div>
             <h1 align="center"> Ongoing voting sessions </h1>
             <DisplaySessions arr={sessions.ongoing} label="ongoing" />
             <h1 align="center"> Expired sessions </h1>
             <DisplaySessions arr={sessions.expired} label="expired" />
-            <div className="centered twentypxmargins extra-padding">
+            <div className="center-aligned-flex column centered twentypxmargins" style={{padding: "20px"}}>
                 <button className="button" onClick={() => setDisplayCNS(true)}>Create new voting session</button>
             </div>
         </div>)

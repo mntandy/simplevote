@@ -2,13 +2,14 @@ import { NextResponse } from 'next/server'
 import dbConnect from '@/app/lib/dbConnect'
 import User from '@/app/models/user'
 import { checkAuthSessionForAccess } from '@/app/lib/server/votingSession'
+import { containsNonEmptyArray } from '@/app/lib/basicutils'
 
 const getVotingSession = async ({nickname,sessionId}) => {
     await dbConnect()
     
     const user = await User.findOne({nickname}).select({"sessions": { $elemMatch: { _id: sessionId }}})
 
-    if(user!==null && Array.isArray(user.sessions) && user.sessions.length)
+    if(user && containsNonEmptyArray(user,"sessions"))
         return user.sessions[0]
     else return null
 }

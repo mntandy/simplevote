@@ -1,8 +1,10 @@
 const Page = () => {
   return (
-    <div className="container">
-      <p>Nothing to see here. Add <i>user</i> to the url.</p>
-    </div>
+    <body>
+      <div className="center-aligned-flex column centered">
+        <p>Nothing to see here yet. Add <i>/user</i> to the url.</p>
+      </div>
+    </body>
   )
 }
 

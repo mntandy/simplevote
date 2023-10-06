@@ -3,6 +3,7 @@ import User from '@/app/models/user'
 
 import { getAuthSession } from '@/app/lib/server/authSession'
 import { getNewVotingToken } from '@/app/lib/server/token'
+import { containsArray } from '../basicutils'
 
 export const getSessionKey = async ({ sessionId }) => {
     const authSession = await getAuthSession()
@@ -10,7 +11,7 @@ export const getSessionKey = async ({ sessionId }) => {
         await dbConnect()
         const user = await User.findById(authSession.user.id).select({ "sessions": { $elemMatch: { _id: sessionId } } })
         return (
-            (Array.isArray(user?.sessions)
+            (containsArray(user,"sessions")
                 && user.sessions.at(0)?.protected
                 && user.sessions.at(0)?.key)
             ?? null)

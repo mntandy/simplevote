@@ -1,0 +1,43 @@
+
+
+.center-aligned-flex {
+    display: flex;
+    align-items: center;
+}
+
+.centered {
+    justify-content: center;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.column {
+    flex-direction: column;
+}
+
+.right-aligned {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.left-aligned {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.main-voting-grid {
+    display: grid;
+    grid-template-columns: minmax(auto,600px);
+    row-gap: 10px;
+}
+
+.main-summary-voting-grid {
+    display: grid;
+    grid-template-columns: minmax(auto,600px);
+    row-gap: 10px;
+}
+

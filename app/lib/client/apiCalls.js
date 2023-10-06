@@ -1,11 +1,10 @@
-import { display } from "@/app/components/Message"
 
 const areExpectedPropertiesPresent = (body,expectedProperties) => 
     expectedProperties.some(
         property => 
-            (typeof property === "string" && !(property in body))
+            (property instanceof String && !Object.hasOwn(body,property))
             ||
-            (Array.isArray(property) && (!(property.some(e => (e in body))))))
+            (Array.isArray(property) && (!(property.some(e => Object.hasOwn(body,e))))))
 
 const checkResponseForErrors = ({responseBody,additionalTest={},expectedProperties}) => {
     if(responseBody.tokenExpired || responseBody.tokenInvalid) 

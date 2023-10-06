@@ -1,22 +1,17 @@
-
-const Sessions = ({ sessions, organiser, intro }) => {
+import { containsNonEmptyArray } from "../lib/basicutils"
+import { getUserText } from "../lib/styles"
+const Sessions = ({ sessions, organiser }) => {
+    
     const Session = ({ e }) =>
         (<a className="twentypxmargins" href={"/" + organiser + "/" + e.id}>{e.description}</a>)
-
+    
     return (
         <>
-            <h1 align="center"> Live sessions </h1>
-            <div className="centered column twentypxmargins">
-                {intro && <p>{intro}</p>}
-                {!intro && (!Array.isArray(sessions.ongoing) || !sessions.ongoing.length) &&
-                    <>
-                        <p>Could not find any ongoing voting sessions...</p>
-                        <p>If you are <i>{organiser}</i>, then you can <a href="/admin">log in to create a new voting session.</a></p>
-                    </>}
-                <div className="centered column">
-                    {sessions.ongoing.map(e =>
-                        <Session key={e} e={e} />)}
-                </div>
+            <h1 align="center"> {getUserText(organiser,"sessionsHeading")} </h1>
+            <div className="center-aligned-flex column centered twentypxmargins">
+                {!containsNonEmptyArray(sessions,"ongoing") ? 
+                    <p>{getUserText(organiser,"sessionsIntro")}</p> 
+                    : sessions.ongoing.map(e => <Session key={e} e={e} />)}
             </div>
         </>)
 }

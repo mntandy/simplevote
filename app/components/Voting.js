@@ -1,96 +1,104 @@
 'use client'
 
-import React, { useState, useEffect, useReducer } from "react"
+import React from "react"
 import RequestKey from '@/app/components/RequestKey'
 import useVotingSession from '@/app/hooks/useVotingSession'
 import useCountdown from "@/app/hooks/useCountdown"
+import useToggleState from "../hooks/useToggleState"
 import '@/app/css/Voting.css'
+import { getClasses, getUserText } from "../lib/styles"
+import { isNonEmptyArray } from "../lib/basicutils"
 
-const BarSvg = ({ votes, rowId }) => {
-    const [rowHeight, setRowHeight] = useReducer(() => document.getElementById(rowId).clientHeight, 15)
+const Countdown = ({ timeleft }) => timeleft && <div>{timeleft}</div>
 
-    useEffect(() => {
-        setRowHeight()
-    }, [])
+const Options = ({ organiser, options, info, myVotes, submitVote }) => {
 
-    return (
-        <svg width={votes * 2} height={rowHeight}>
-            <rect width={votes * 2} height={rowHeight} className="svgbar" />
-        </svg>
-    )
+    const UnvoteButton = ({ e }) =>
+        myVotes.get(e.id) ?
+            <div className={getClasses(organiser, "voting-button-div")}>
+                <button
+                    id={e.id + "unvote"}
+                    className={getClasses(organiser, "voting-button")}
+                    onClick={submitVote(e.id, false)}>
+                    {getUserText(organiser, "unvoteButton")}
+                </button>
+            </div> :
+            <div className={getClasses(organiser, "voting-button-div-disactivated")}>
+                <button
+                    id={e.id + "unvote"}
+                    className={getClasses(organiser, "voting-button-disactivated")}
+                    onClick={null}>
+                    {getUserText(organiser, "unvoteButton")}
+                </button>
+            </div>
+
+
+    const VoteButton = ({ e }) =>
+        <div className={getClasses(organiser, "voting-button-div")}>
+            <button
+                id={e.id + "vote"}
+                className={getClasses(organiser, "voting-button" + (myVotes.get(e.id) ? " voted" : ""))}
+                onClick={submitVote(e.id, true)}>
+                {getUserText(organiser, "voteButton")}
+            </button>
+        </div>
+
+    return (!isNonEmptyArray(options) ?
+        <p align="center">Could not find anything to vote for...</p> :
+        <div className="main-voting-grid">
+            {options.map(e =>
+                <div className={getClasses(organiser, "voting-box")} key={e.id}>
+                    <div className="voting-option">
+                        {e.description}
+                        {e.id in info && <span className="voting-info"><br />{getUserText(organiser, info[e.id])}</span>}
+                    </div>
+                    <div className="center-aligned-flex row centered" style={{ marginLeft: "auto", whiteSpace: "nowrap" }}>
+                        <UnvoteButton e={e} />
+                        <VoteButton e={e} />
+                        {getUserText(organiser, "you")} {(myVotes.get(e.id) ?? "0")} {getUserText(organiser, "total")} {e.votes}</div>
+                </div>)}
+        </div>)
 }
 
-const Countdown = ({ timeleft }) => {
-    if (timeleft)
-        return <div>{timeleft}</div>
-    return null
-}
-
-const useToggleState = (initial) => {
-    const [state, setState] = useState(initial)
-    const toggle = () => setState(!state)
-    return [state, toggle]
-}
 
 const Voting = ({ sessionId, organiser }) => {
 
     const [autoRefresh, toggleAutoRefresh] = useToggleState(false)
     const [sort, toggleSort] = useToggleState(false)
     const votingSession = useVotingSession({ sessionId, organiser, autoRefresh })
-    const { timeleft } = useCountdown(votingSession.expiration)
+    const { timeleft } = useCountdown({ organiser, expiration: votingSession.expiration })
 
-    const UnvoteButton = ({ e }) =>
-        <button
-            id={e.id + "unvote"}
-            className={"voting-button"}
-            onClick={votingSession.handleVote(e.id, false)}>
-            Unvote
-        </button>
+    const VotesLeft = () => votingSession.maxVotes !== null
+        && votingSession.myVotes !== null
+        && <div> {getUserText(organiser, "votesLeft")} {votingSession.maxVotes - votingSession.myVotes}</div>
 
-    const VoteButton = ({ e }) =>
-        <button
-            id={e.id + "vote"}
-            className={"voting-button" + (votingSession.currentVotes.get(e.id) ? " voted" : "")}
-            onClick={votingSession.handleVote(e.id, true)}>
-            {"Vote"}
-        </button>
-
-    const Options = ({ options, info }) =>
-        (!Array.isArray(options) || !options.length) ?
-            <p align="center">Could not find anything to vote for...</p> :
-            <div className="main-voting-grid">
-                {options.map(e =>
-                    <div className="voting-box" key={e.id}>
-                        <div className="voting-option">
-                            {e.description}
-                            {e.id in info && <span className="voting-info"><br />{info[e.id]}</span>}
-                        </div>
-                        <div style={{ marginLeft: "auto", whiteSpace: "nowrap" }}>
-                            <UnvoteButton e={e} />
-                            <VoteButton e={e} />
-                            {"You: " + (votingSession.currentVotes.get(e.id) ?? "0")}{" Total: " + e.votes}</div>
-                    </div>)}
-            </div>
     if (votingSession.requestKey)
-        return (<RequestKey submitKey={votingSession.submitKey} />)
+        return (<RequestKey organiser={organiser} submitKey={votingSession.submitKey} />)
     else if (!votingSession.requestKey && !votingSession.description)
         return (<p>Loading...</p>)
     else return (
-        <div className="centered twentypxmargins column extra-gap">
+        <div className="center-aligned-flex column centered" style={{ rowGap: "20px" }}>
             <h1 align="center">{votingSession.description}</h1>
             <Countdown timeleft={timeleft} />
             <div style={{ display: "flex" }}>
                 <label className="radio label">
-                    <input type="checkbox" checked={autoRefresh} onChange={toggleAutoRefresh} />
-                    Auto-refresh
+                    <input
+                        style={{ borderColor: "white" }}
+                        type="checkbox" checked={autoRefresh} onChange={toggleAutoRefresh} />
+                    {getUserText(organiser, "refreshText")}
                 </label>
                 <label className="radio label">
                     <input type="checkbox" checked={sort} onChange={toggleSort} />
-                    Sort by most votes
+                    {getUserText(organiser, "sortText")}
                 </label>
             </div>
-            {votingSession.maxVotes!==null && votingSession.myVotes!==null && <div>You have {votingSession.maxVotes-votingSession.myVotes} vote left to use.</div>}
-            <Options options={sort ? votingSession.sortedOptions() : votingSession.options} info={votingSession.info} />
+            <VotesLeft />
+            <Options
+                organiser={organiser}
+                myVotes={votingSession.currentVotes}
+                submitVote={votingSession.handleVote}
+                options={sort ? votingSession.sortedOptions() : votingSession.options}
+                info={votingSession.info} />
 
         </div>
     )

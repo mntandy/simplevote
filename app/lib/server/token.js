@@ -35,5 +35,5 @@ const decodeVotingToken = async ({ request, sessionId, organiser }) => {
     }
 }
 
-export { decodeVotingToken, verifyTokenFromHeader, getNewVotingToken, verifyToken }
+export { getTokenFromHeader, decodeVotingToken, verifyTokenFromHeader, getNewVotingToken, verifyToken }
 

@@ -4,7 +4,7 @@ import Code from '@/app/components/Code'
 const Page = ({ params }) => {
     return (    
         <>
-            <Code sessionId={params.sessionId}/>
+            <Code sessionId={params.sessionId} organiser={params.organiser}/>
             <VotingSummary sessionId={params.sessionId} organiser={params.organiser}/>
         </>
     )

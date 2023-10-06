@@ -2,9 +2,10 @@
 import { useState, useEffect } from "react"
 import { submitNewSession, fetchVotingSessionForCopy } from "@/app/lib/client/apiCalls"
 import { tryAndCatch } from "../lib/client/errorHandling"
+import { isNonEmptyArray } from "../lib/basicutils"
 
 const DisplayArrayAsList = ({arr}) =>
-    (Array.isArray(arr) && !!arr.length) ?
+    isNonEmptyArray(arr) ?
         <label className="label">Current options
             <ul>{arr.map(v => <li key={v} className="option">{v}</li>)}</ul>
         </label> : null
@@ -62,7 +63,7 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
     }
 
     const handleCreateSession = async () => {
-        if (!Array.isArray(options) || !options.length)
+        if (!isNonEmptyArray(options))
             setOptionsInfo(true)
         else {
             const success = await tryAndCatch(submitNewSession, {
@@ -86,7 +87,7 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
     }
 
     return (
-        <div className="extra-padding">
+        <div style={{padding: "20px"}}>
             <label className="label">
                 Name
                 <input className="input" type="text" name="description" placeholder="Description" onChange={handleChange} value={form.description} />

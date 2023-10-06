@@ -1,12 +1,13 @@
 import { useState } from "react"
+import { getClasses } from "../lib/styles"
 
-const RequestKey = ({submitKey}) => {
+const RequestKey = ({organiser,submitKey}) => {
     const [key,setKey] = useState("")
 
     const handleSubmitKey = () => submitKey({key}) 
 
     return (
-    <div className="container">
+    <div className={getClasses(organiser,"container")}>
         <div>
             <label>
                 Enter key:

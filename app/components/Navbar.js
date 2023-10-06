@@ -1,23 +1,23 @@
 import Link from 'next/link'
 import SignOutButton from '@/app/components/SignOutButton'
 import { getAuthSession } from '../lib/server/authSession'
-import '@/app/css/Navbar.css'
+import { getClasses, getLogo, getLogoLink } from '../lib/styles'
 
-const Navbar = async () => {
+const Navbar = async ({organiser}) => {
     const session = await getAuthSession()
     return (
-    <nav>
-        <div className="nav-left">
+    <nav className={getClasses(organiser,"nav")}>
+        <div className={getClasses(organiser, "nav-left")}>
         </div>
-        <div className="nav-center">
-            <a className="nav-a" href="https://www.jammin.no">
-                <img src="/logo.jpg" height="50" alt="Logo"/>
+        <div className={getClasses(organiser,"nav-center")}>
+            <a className={getClasses(organiser,"nav-a")} href={getLogoLink(organiser)}>
+                <img src={getLogo(organiser)} height="50" alt="Logo"/>
             </a>
         </div>
-        <div className="nav-right">
+        <div className={getClasses(organiser,"nav-right")}>
             {session ? 
-                <SignOutButton/> :
-                <Link className="nav-a" href="/admin"> Admin</Link>}
+                <SignOutButton organiser={organiser}/> :
+                <Link className={getClasses(organiser,"nav-a")} href="/admin"> Admin</Link>}
         </div>
     </nav>)
 }

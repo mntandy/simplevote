@@ -1,17 +1,13 @@
 
 import { getSessionKey } from "@/app/lib/server/votingSession"
+import { getClasses } from "../lib/styles"
 
-const Code = async ({sessionId}) => {
-    const sessionKey = await getSessionKey({sessionId})
-    
-    if(sessionKey)
+const Code = async ({ sessionId,organiser }) => {
+    const sessionKey = await getSessionKey({ sessionId })
+    if (sessionKey)
         return (
-            <div className="centered">
-                <div className="container code">
-                    <div>
-                        <h3><b>Voting Code </b><b className="key">{sessionKey}</b></h3>
-                    </div> 
-                </div>
+            <div className={getClasses(organiser,"container code")}>
+                <h3><b>{getUserText(organiser,"votingCode")} </b><b className="key">{sessionKey}</b></h3>
             </div>
         )
     else

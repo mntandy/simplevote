@@ -26,7 +26,7 @@ const Login = ({toggleNewUser=null}) => {
         }
     }
     return (
-        <div className="container">
+        <div className="common-container standard-container">
             <div>
             <label>
                 Email
@@ -44,7 +44,7 @@ const Login = ({toggleNewUser=null}) => {
             <div>
             {loginError && <p className="error">{loginError}</p>}
             </div>
-            {toggleNewUser!==null &&
+            {toggleNewUser &&
                 <button className="button is-link is-light" onClick={toggleNewUser}>Register a new user</button>}
             </div>
             

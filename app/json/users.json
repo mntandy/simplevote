@@ -1,0 +1,41 @@
+{
+    "jammin": {
+        "logoLink": "https: //www.jammin.no",
+        "sessionsIntro": "Her vil du kunne stemme frem dine favoritter under våre opptredner.",
+        "sessionsHeading": "Dagens settliste",
+        "sortText": "Sorter etter flest stemmer",
+        "refreshText": "Oppdater automatisk",
+        "votingCode": "Kode for å stemme",
+        "votesLeft": "Antall stemmer igjen å fordele:",
+        "voteButton": "STEM",
+        "unvoteButton": "TREKK",
+        "you": "Du:",
+        "total": "Totalt:",
+        "votingClosed": "Avstemning er avsluttet.",
+        "voteFirst": "Ingen stemme å trekke tilbake.",
+        "registerFirst": "Avgitt stemme må først registres.",
+        "voteOut": "Du er fri for stemmer. Trekk noe tilbake.",
+        "voteClosed": "Avstemningen er stengt.",
+        "multiFirst": "En stemme av gangen, takk."
+    },
+    "standard": {
+        "logoLink": "/",
+        "sessionsIntro": "Could not find any ongoing voting sessions...",
+        "sessionsHeading": "Live sessions",
+        "sortText": "Sort by most votes",
+        "refreshText": "Auto-refresh",
+        "votingCode": "Voting code",
+        "votesLeft": "Personal votes to distribute:",
+        "voteButton": "Vote",
+        "unvoteButton": "Unvote",
+        "you": "You:",
+        "total": "Total:",
+        "votingClosed": "Voting is closed.",
+        "voteFirst": "You have to vote before you can unvote.",
+        "registerFirst": "Let's register the first vote first.",
+        "voteOut": "You're out of votes. Unvote something.",
+        "voteClosed": "The voting session is closed.",
+        "multiFirst": "Submit one vote at the time, please."
+
+    }
+}

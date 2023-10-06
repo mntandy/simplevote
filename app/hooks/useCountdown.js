@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react"
 import useInterval from "@/app/hooks/useInterval"
+import { getUserText } from "../lib/styles"
 
-const useCountdown = (expiration) => {
+const useCountdown = ({expiration,organiser}) => {
     const [timeleft,setTimeleft] = useState(null)
     const interval = useInterval()
     const [expired,setExpired] = useState(null)
@@ -12,7 +13,7 @@ const useCountdown = (expiration) => {
     const update = (date) => {
         const now = Date.now()
         if(date.valueOf()<=now) {
-            setTimeleft("Voting is closed.")
+            setTimeleft(getUserText(organiser,"votingClosed"))
             interval.clear()
             setExpired(true)
         }

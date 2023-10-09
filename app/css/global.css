@@ -1,5 +1,4 @@
 
-
 .center-aligned-flex {
     display: flex;
     align-items: center;
@@ -15,6 +14,12 @@
 
 .column {
     flex-direction: column;
+}
+
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: minmax(auto,600px) auto auto;
+    gap: 20px;
 }
 
 .right-aligned {
@@ -41,3 +46,77 @@
     row-gap: 10px;
 }
 
+.button {
+    font-family: sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: rgb(22, 113, 232);
+    color: white;
+    margin: 10px;
+    padding: 10px;
+    border: 0px;
+}
+
+.button:active {
+    transform: translateY(2px);
+    border-width: 3px;
+}
+
+.button:hover {
+    background-color: rgb(22, 113, 200);
+}
+
+.error {
+    color: red;
+}
+
+.session-button {
+    background-color: transparent;
+    cursor: pointer;
+    margin: 0px;
+    border: 0;
+}
+
+.message-text {
+    margin-left: 15px;
+    margin-right: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align-self: center;
+}
+
+.close-button {
+    font-size: 20px;
+    border: 1px solid;
+    border-radius: 10px;
+    padding-top: 0px;
+    margin: 3px;
+    line-height: 100%;
+    align-self: flex-start;
+    cursor:pointer;
+}
+
+.close-div::before {
+    display: inline-block;
+    content: "\00d7";
+}
+
+.option {
+    font-weight: normal;
+}
+
+.voting-info {
+    color: red;
+}
+
+.key {
+    color:rgb(22, 113, 232);
+}
+
+.code {
+    border: 2px solid rgb(22, 113, 232);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+}

@@ -4,8 +4,9 @@ import User from '@/app/models/user'
 import bcrypt from 'bcrypt'
 import errorResponse from '@/app/lib/errorResponse'
 
-export async function POST(req) {
-    const body = await req.json()
+export async function POST(request) {
+
+    const body = await request.json()
     let result = null
     
     await dbConnect()
@@ -22,19 +23,16 @@ export async function POST(req) {
             ,{}), {status: 400})
     }
     else {
-        const saltRounds = 10
-        const passwordHash = await bcrypt.hash(body.password, saltRounds)
         const user = new User({
             email: body.email,
-            passwordHash: passwordHash,
+            passwordHash: await bcrypt.hash(body.password, 10),
             nickname: body.nickname,
         })
         try {
             result = (await user.save())._doc
             return NextResponse.json({ email: user.email, nickname: user.nickname }, {status: 200})
         }
-        catch(err) {
-            console.log(err)
+        catch (err) {
             return errorResponse(err)
         }
     }

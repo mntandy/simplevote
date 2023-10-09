@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { getClasses } from "../lib/styles"
+import { getClasses } from "@/app/lib/styles"
 
 const RequestKey = ({organiser,submitKey}) => {
     const [key,setKey] = useState("")

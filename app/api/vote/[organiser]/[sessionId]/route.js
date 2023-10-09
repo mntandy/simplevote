@@ -12,19 +12,20 @@ const getVotingSession = async ({ nickname, sessionId }) => {
     await dbConnect()
 
     const user = await User.findOne({ nickname }).select({ "sessions": { $elemMatch: { _id: sessionId } } })
-    return containsNonEmptyArray(user,"sessions") ? user.sessions[0] : null
+    return containsNonEmptyArray(user, "sessions") ? user.sessions[0] : null
 }
 
 export async function GET(request, { params }) {
-    let decodedToken = await decodeVotingToken({ request, sessionId: params.sessionId, organiser: params.organiser })
-
-    if (decodedToken.error)
-        return NextResponse.json({ error: decodedToken.error }, (decodedToken.status ? { status: decodedToken.status } : null))
-    const session = await getVotingSession({ nickname: params.organiser, sessionId: params.sessionId })
-    if (session) {
-        return NextResponse.json({ ...session._doc, key: undefined, currentVotes: decodedToken?.currentVotes ?? null })
+    try {
+        const decodedToken = decodeVotingToken({ request, sessionId: params.sessionId, organiser: params.organiser })
+        const session = await getVotingSession({ nickname: params.organiser, sessionId: params.sessionId })
+        if (decodedToken && session)
+            return NextResponse.json({ ...session._doc, key: undefined, currentVotes: decodedToken?.currentVotes ?? null })
+        return NextResponse.json({ error: "Invalid token or voting session" }, { status: 400 })
     }
-    return NextResponse.json({ error: "Voting session not found" }, { status: 400 })
+    catch (err) {
+        return errorResponse(err)
+    }
 }
 
 const updateVote = async (nickname, sessionId, optionId, change) => {
@@ -66,11 +67,11 @@ export async function POST(request, { params }) {
                 else {
                     const { expiration, maxVotes } = await getVotingSession({ nickname: params.organiser, sessionId: params.sessionId })
                     if (expiration && new Date(expiration) <= Date.now())
-                        response["info"] = "voteClosed"
+                        response["info"] = "votingClosed"
                     else {
-                        if (!upvote && containsArray(decodedToken,"currentVotes")) {
+                        if (!upvote && containsArray(decodedToken, "currentVotes")) {
                             const i = decodedToken.currentVotes.indexOf(id)
-                            if (i < 0) 
+                            if (i < 0)
                                 response["info"] = "voteFirst"
                             else {
                                 await updateVote(params.organiser, decodedToken.sessionId, id, -1)
@@ -79,11 +80,11 @@ export async function POST(request, { params }) {
                             }
                         }
                         else if (upvote) {
-                            if (containsArray(decodedToken,"currentVotes") && decodedToken.currentVotes.length >= (+maxVotes || decodedToken.currentVotes.length))
+                            if (containsArray(decodedToken, "currentVotes") && decodedToken.currentVotes.length >= (+maxVotes || decodedToken.currentVotes.length))
                                 response["info"] = "voteOut"
                             else {
                                 await updateVote(params.organiser, decodedToken.sessionId, id, 1)
-                                if (containsArray(decodedToken,"currentVotes"))
+                                if (containsArray(decodedToken, "currentVotes"))
                                     decodedToken.currentVotes.push(id)
                                 else
                                     decodedToken.currentVotes = [id]
@@ -92,18 +93,18 @@ export async function POST(request, { params }) {
                         }
                     }
                 }
+                voteLock.delete(token)
             }
         }
         catch (err) {
-            console.log(err)
-            response["error"] = 'Something went very wrong with the vote.'
+            voteLock.delete(token)
+            return errorResponse(err)
         }
-        voteLock.delete(token)
     }
     else
         response["error"] = "No token."
 
-    if (Object.hasOwn(response,"error"))
+    if (Object.hasOwn(response, "error"))
         return NextResponse.json(response, { status: 400 })
     else
         return NextResponse.json(response)

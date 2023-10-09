@@ -39,41 +39,41 @@ export default function Register() {
                     reset()
                 }
             }
-            catch (exception) {
+            catch (err) {
                 display("Error registering user.")
             }
         }
     }
     return (
-        <div>
-            <div className="field">
+        <>
+            <div className="">
                 <label className="label">Email</label>
                 <input className="input" type="email" placeholder="Email input"
                     onChange={({ target }) => setEmail(target.value)} value={email}
                     onClick={(event) => setEmailError(null)}/>
                 {emailError && <p className="help is-danger">{emailError}</p>}
             </div>
-            <div className="field">
+            <div className="">
                 <label className="label">Password</label>
                 <input className="input" type="password" value={password} placeholder="Password"
                     onChange={({ target }) => setPassword(target.value)}
                     onClick={(event) =>  setPasswordError(null)}/>
                 {passwordError && <p className="help is-danger">{passwordError}</p>}
             </div>
-            <div className="field">
+            <div className="">
                 <label className="label">Retype password</label>
                 <input className="input" type="password" value={retypepassword} placeholder="Password"
                     onChange={({ target }) => setRetypePassword(target.value)}/>
                 {password!==retypepassword && <p className="help is-danger">Passwords do not match.</p>}
             </div>
-            <div className="field">
+            <div className="">
                 <label className="label">Nickname</label>
                 <input className="input" type="text" placeholder="Nickname" value={nickname}
                     onChange={({ target }) => setNickname(target.value)}
                     onClick={(event) => setNicknameError(null)}/>
                 {nicknameError && <p className="help is-danger">{nicknameError}</p>}
             </div>
-            <div className="field is-grouped">
+            <div className="center-aligned-flex row centered">
                 <div className="control">
                     <button className="button is-link" onClick={handleRegister}>Register</button>
                 </div>
@@ -81,6 +81,6 @@ export default function Register() {
                     <button className="button is-link is-light" onClick={reset}>Cancel</button>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

@@ -19,8 +19,5 @@ export async function GET(request, { params }) {
         return NextResponse.json({ error: "No access to copy session."})
 
     const session = await getVotingSession({nickname:params.organiser,sessionId:params.sessionId})
-    if(session) {
-        return NextResponse.json(session)
-    }
-    return NextResponse.json({error: "Voting session not found"},{status: 400})
+    return NextResponse.json(session ? session : {error: "Voting session not found"},{status: 400})
 }

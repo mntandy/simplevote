@@ -4,7 +4,7 @@ import { submitNewSession, fetchVotingSessionForCopy } from "@/app/lib/client/ap
 import { tryAndCatch } from "../lib/client/errorHandling"
 import { isNonEmptyArray } from "../lib/basicutils"
 
-const DisplayArrayAsList = ({arr}) =>
+const DisplayArrayAsList = ({ arr }) =>
     isNonEmptyArray(arr) ?
         <label className="label">Current options
             <ul>{arr.map(v => <li key={v} className="option">{v}</li>)}</ul>
@@ -31,18 +31,18 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
             const responseBody = await tryAndCatch(fetchVotingSessionForCopy, { organiser, sessionId })
             if (responseBody) {
                 setForm(f => ({
-                    ...f, 
-                    description: ("Copy of " + responseBody.description ?? ""), 
+                    ...f,
+                    description: ("Copy of " + responseBody.description ?? ""),
                     maxVotes: responseBody.maxVotes ?? "",
-                    access: responseBody.protected ? "protected" : "", 
-                    key: responseBody.key ?? "" 
+                    access: responseBody.protected ? "protected" : "",
+                    key: responseBody.key ?? ""
                 }))
                 setOptions([...(new Set(responseBody.options.map(e => e.description))).values()])
             }
         }
         if (organiser && sessionId)
             fetchSession()
-    }, [sessionId,organiser])
+    }, [sessionId, organiser])
 
     const handleChange = ({ target }) => {
         setForm(f => ({ ...f, [target.name]: target.value }))
@@ -87,7 +87,7 @@ const CreateNewVote = ({ close, update, organiser, sessionId }) => {
     }
 
     return (
-        <div style={{padding: "20px"}}>
+        <div style={{ padding: "20px" }}>
             <label className="label">
                 Name
                 <input className="input" type="text" name="description" placeholder="Description" onChange={handleChange} value={form.description} />

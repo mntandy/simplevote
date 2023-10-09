@@ -36,6 +36,10 @@
     background-color: hsl(0, 0%, 93%);
 }
 
+.jammin-content-box {
+    background-color:  rgb(215, 215, 215);
+}
+
 .jammin-voting-button {
     font-size: 16px;
     font-weight: 800;

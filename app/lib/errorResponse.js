@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
 const errorResponse = (err) => {
+    console.log(err)
     console.log(JSON.stringify(err))
 
     switch(err.name) {

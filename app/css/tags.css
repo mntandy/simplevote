@@ -1,3 +1,57 @@
 body {
     margin: 0px;
 }
+
+h1 {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+input[type=text],input[type=email],input[type=password],input[type=number],textarea {
+    outline: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 2px transparent;
+    padding: 12px;
+    background-color: white;
+}
+
+input[type=radio] {
+    outline: none;
+    border-color:  #555;
+    border: 2px transparent;
+    padding: 0px;
+}
+
+input[type=radio]:checked {
+    background-color: black;
+    border: 2px solid black;
+}
+
+input[type=text],input[type=email],input[type=password],input[type=number] {
+    width: 176px;
+}
+
+input:hover, textarea:hover {
+    background-color: white;
+}
+
+input:focus, textarea:focus {
+    border: 2px solid #555;
+}
+
+label,input{
+    display:flex;
+    flex-direction:column;
+    margin: 5px;
+}
+
+label {    
+    font-weight:bold;
+    font-size:14;
+}
+
+.radio {
+    flex-direction:row;
+    align-items: center;
+}

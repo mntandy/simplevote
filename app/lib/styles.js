@@ -1,6 +1,6 @@
 import Users from '@/app/json/users'
 
-const hasStyle = (s) => ["jammin","test"].includes(s)
+const hasStyle = (s) => ["test","jammin"].includes(s)
 
 const getOrganiser = (s) => s==="test" ? "jammin" : s
 
@@ -9,7 +9,7 @@ const withStyle = (s) => hasStyle(s) ? getOrganiser(s) : "standard"
 export const getClasses = (organiser, classes) =>
     classes.split(' ').flatMap(e => ([`${withStyle(organiser)}-${e}`,`common-${e}`])).join(" ")
 
-export const getLogo = (organiser) => organiser in Users ? "/" + organiser + ".jpg" : "/jammin.jpg"
+export const getLogo = (organiser) => getOrganiser(organiser) in Users ? "/" + getOrganiser(organiser) + ".jpg" : "/vote.png"
 
 export const getLogoLink = (organiser) => organiser in Users ? Users[organiser]['logoLink'] : "/" + organiser
 

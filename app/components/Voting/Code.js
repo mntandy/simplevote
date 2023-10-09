@@ -1,6 +1,6 @@
 
 import { getSessionKey } from "@/app/lib/server/votingSession"
-import { getClasses } from "../lib/styles"
+import { getClasses, getUserText } from "../../lib/styles"
 
 const Code = async ({ sessionId,organiser }) => {
     const sessionKey = await getSessionKey({ sessionId })

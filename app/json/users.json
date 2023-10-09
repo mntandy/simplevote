@@ -15,7 +15,7 @@
         "voteFirst": "Ingen stemme å trekke tilbake.",
         "registerFirst": "Avgitt stemme må først registres.",
         "voteOut": "Du er fri for stemmer. Trekk noe tilbake.",
-        "voteClosed": "Avstemningen er stengt.",
+        "voteCloses": "Avstemningen stenges om ",
         "multiFirst": "En stemme av gangen, takk."
     },
     "standard": {
@@ -30,11 +30,11 @@
         "unvoteButton": "Unvote",
         "you": "You:",
         "total": "Total:",
-        "votingClosed": "Voting is closed.",
         "voteFirst": "You have to vote before you can unvote.",
         "registerFirst": "Let's register the first vote first.",
         "voteOut": "You're out of votes. Unvote something.",
-        "voteClosed": "The voting session is closed.",
+        "votingClosed": "The voting session is closed.",
+        "voteCloses": "Voting closes in ",
         "multiFirst": "Submit one vote at the time, please."
 
     }

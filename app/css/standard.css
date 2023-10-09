@@ -1,173 +1,18 @@
+:root {
+    --main-bg-color: rgb(239, 240, 241);
+    --content-bg-color: white;
+    --voting-button-color:  hsl(211, 68%, 59%);
+    --voted-button-color: hsl(211, 73%, 38%);
+    --nav: rgba(31, 162, 223, 0.307); 
+  }
+
 .standard-body {
-    background-color: rgb(215, 215, 215);
+    background-color: var(--main-bg-color);
     font-family: sans-serif;
 }
 
-.twentypxmargins {
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-bottom: 10px;
-}
-
-.card {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    width: 40%;
-    border-radius: 5px;
-}
-
-.grid-wrapper {
-    display: grid;
-    grid-template-columns: minmax(auto,600px) auto auto;
-    gap: 20px;
-}
-
-.card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-}
-
-.voting-info {
-    color: red;
-}
-
-.key {
-    color:rgb(22, 113, 232);
-}
-.code {
-    border: 2px solid rgb(22, 113, 232);
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 30px;
-    padding-right: 30px;
-}
-
-label,input{
-    display:flex;
-    flex-direction:column;
-    margin: 5px;
-}
-
-.label {    
-    font-weight:bold;
-}
-
-.svgbar {
-    fill:rgb(22, 113, 232);
-    stroke:rgb(22, 113, 232);
-    stroke-width: 1px;
-}
-
-.small-width {
-    margin-top: 5px;
-    width: 200px;
-}
-
-input[type=text],input[type=email],input[type=password],input[type=number],textarea {
-    outline: none;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border: 2px transparent;
-    padding: 12px;
-    background-color: white;
-}
-
-input[type=radio] {
-    outline: none;
-    border-color:  #555;
-    border: 2px transparent;
-    padding: 0px;
-}
-
-input[type=radio]:checked {
-    background-color: black;
-    border: 2px solid black;
-}
-
-input[type=text],input[type=email],input[type=password],input[type=number] {
-    width: 176px;
-}
-
-input:hover, textarea:hover {
-    background-color: rgb(245, 245, 245);
-}
-
-input:focus, textarea:focus {
-    border: 2px solid #555;
-}
-
-.button {
-    font-family: serif;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 24px;
-    background-color: rgb(22, 113, 232);
-    color: white;
-    margin: 5px;
-    padding: 15px;
-    border: 0px;
-}
-
-.button:active {
-    transform: translateY(2px);
-    border-width: 3px;
-}
-
-.button:hover {
-    background-color: rgb(22, 113, 200);
-}
-
-.error {
-    color: red;
-}
-
-.session-button {
-    background-color: transparent;
-    cursor: pointer;
-    margin: 0px;
-    border: 0;
-}
-
-.message-text {
-    margin-left: 15px;
-    margin-right: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    align-self: center;
-}
-
-.close-button {
-    font-size: 20px;
-    border: 1px solid;
-    border-radius: 10px;
-    padding-top: 0px;
-    margin: 3px;
-    line-height: 100%;
-    align-self: flex-start;
-    cursor:pointer;
-}
-
-.close-div::before {
-    display: inline-block;
-    content: "\00d7";
-}
-
-.option {
-    font-weight: normal;
-}
-.radio {
-    font-size:14;
-    flex-direction:row;
-    align-items: center;
-}
-
-h1 {
-    white-space: normal;
-    overflow-wrap: anywhere;
-}
-
-
 .standard-nav {
-    background-color: blueviolet;
+    background: var(--nav);
 }
 
 .standard-nav-left {
@@ -185,32 +30,37 @@ h1 {
     text-decoration: none;  
 }
 
+.standard-content-box {
+    background-color: var(--content-bg-color);
+}
+
 .standard-container {
-    border: 1px solid red;
-    background-color: hsl(0, 0%, 93%);
+    border: 1px solid var(--nav);
+    background-color: var(--content-bg-color);
 }
 
 .standard-voting-button {
     font-size: 14px;
     cursor: pointer;
-    border-radius: 20px;
     margin: 5px;
-    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
     border: 0px solid black;
-    background-color: rgb(52, 134, 249);
+    background-color: var(--voting-button-color);
     color: white;
     overflow-wrap:normal;
 }
 
 .standard-voting-button-disactivated {
     font-size: 14px;
-    cursor: pointer;
     border-radius: 20px;
     margin: 5px;
-    padding: 10px;
+    padding: 5px;
     border: 0px solid black;
-    background-color: rgb(52, 134, 249);
-    color: white;
+    background-color: var(--content-bg-color);
+    color:var(--content-bg-color);
     overflow-wrap:normal;
 }
 
@@ -220,6 +70,26 @@ h1 {
 }
 
 .standard-voted {
-    background-color: hsl(247, 91%, 36%);
+    background-color: var(--voted-button-color);
     color: white;
+}
+
+.standard-voting-button-div {
+    margin: 3px;
+    background-color:var(--content-bg-color);
+    width: fit-content;
+}
+
+.standard-voting-button-div-disactivated {
+    margin: 3px;
+    background-color:var(--content-bg-color);
+    width: fit-content;
+}
+
+.standard-summary-voting-box {
+    border: 1px solid var(--nav);
+}
+
+.standard-voting-box {
+    border: 1px solid var(--nav);
 }

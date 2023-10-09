@@ -1,11 +1,10 @@
-import VotingSummary from '@/app/components/VotingSummary'
-import Code from '@/app/components/Code'
-            
+import Code from '@/app/components/Voting/Code'
+import VotingShared from '@/app/components/Voting/VotingShared'            
 const Page = ({ params }) => {
     return (    
         <>
             <Code sessionId={params.sessionId} organiser={params.organiser}/>
-            <VotingSummary sessionId={params.sessionId} organiser={params.organiser}/>
+            <VotingShared sessionId={params.sessionId} organiser={params.organiser} summary={true}/>
         </>
     )
 }

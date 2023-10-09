@@ -4,40 +4,51 @@ import { useState, useEffect } from "react"
 
 import useInterval from '@/app/hooks/useInterval'
 import useVotingToken from '@/app/hooks/useVotingToken'
+import useCountdown from "./useCountdown"
+import useToggleState from "./useToggleState"
 import { fetchVotingSession } from "../lib/client/apiCalls"
 import { tryAndCatch } from "../lib/client/errorHandling"
 import { containsArray } from "../lib/basicutils"
 
 const arrToMap = (arr) => arr.reduce((acc, e) => acc.set(e, 1 + (acc.get(e) || 0)), new Map())
 
-const useVotingSession = ({ sessionId, organiser, autoRefresh }) => {
+const useOptions = () => {
+    const [options, set] = useState([])
+    
+    const sorted = () => options.toSorted((a, b) => a.votes < b.votes ? 1 : (a.votes > b.votes ? -1 : 0))
+    const unSorted = () => options
+
+    return { set, sorted, unSorted }
+}
+
+const useVotingSession = ({ sessionId, organiser }) => {
+    const autoRefresh = useToggleState(false)
     const [description, setDescription] = useState("")
-    const [options, setOptions] = useState([])
     const [info, setInfo] = useState({})
     const [currentVotes, setCurrentVotes] = useState(new Map())
     const refreshTimer = useInterval()
-    const [expiration, setExpiration] = useState(null)
     const [maxVotes, setMaxVotes] = useState(null)
     const [myVotes, setMyVotes] = useState(null)
     const [voteSubmitted, setVoteSubmitted] = useState(false)
     const { votingToken, requestKey, submitKey, submitVote } = useVotingToken({ sessionId, organiser })
+    const { timeleft, initialiseCountdown } = useCountdown({ organiser })
+    const options = useOptions()
     const resetInfo = () => setInfo({})
 
-    const sortedOptions = () => options.toSorted((a, b) => a.votes < b.votes ? 1 : (a.votes > b.votes ? -1 : 0))
 
     const fetchData = async () => {
         const responseBody = await tryAndCatch(fetchVotingSession, { organiser, sessionId, token: votingToken })
         if (responseBody) {
             setDescription(responseBody.description)
-            setOptions(responseBody.options)
+            options.set(responseBody.options)
             if (responseBody?.maxVotes)
                 setMaxVotes(responseBody.maxVotes)
-            if (containsArray(responseBody,"currentVotes")) {
+            if (containsArray(responseBody, "currentVotes")) {
                 setMyVotes(responseBody.currentVotes.length)
                 setCurrentVotes(arrToMap(responseBody.currentVotes))
             }
             if (responseBody?.expiration)
-                setExpiration(responseBody.expiration)
+                initialiseCountdown(responseBody.expiration)
         }
     }
 
@@ -69,21 +80,34 @@ const useVotingSession = ({ sessionId, organiser, autoRefresh }) => {
     }
 
     useEffect(() => {
-        if (autoRefresh)
+        if (autoRefresh.state)
             resetFetchTimer()
         else
             refreshTimer.clear()
-    }, [autoRefresh])
+    }, [autoRefresh.state])
 
     useEffect(() => {
         if (votingToken) {
             fetchData()
-            if (autoRefresh)
+            if (autoRefresh.state)
                 resetFetchTimer()
         }
     }, [votingToken])
 
-    return { maxVotes, myVotes, resetInfo, info, currentVotes, options, sortedOptions, description, handleVote, submitKey, requestKey, expiration }
+    return {
+        timeleft,
+        maxVotes, 
+        myVotes, 
+        resetInfo, 
+        info, 
+        currentVotes, 
+        options,  
+        description, 
+        handleVote, 
+        submitKey, 
+        requestKey,
+        autoRefresh
+    }
 }
 
 export default useVotingSession

@@ -1,15 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import CreateNewVote from "@/app/components/CreateNewVote"
 import { fetchVotingSessions, deleteVotingSession } from '@/app/lib/client/apiCalls'
-import { tryAndCatch } from '../lib/client/errorHandling'
-import React from 'react'
-import { isNonEmptyArray } from '../lib/basicutils'
+import { tryAndCatch } from '@/app/lib/client/errorHandling'
+import { isNonEmptyArray } from '@/app/lib/basicutils'
 
-const useVotingSessions = ({organiser,votingSessions}) => {
+const useVotingSessions = ({ organiser, votingSessions }) => {
     const [sessions, setSessions] = useState(votingSessions)
-    
+
     const updateSessions = async () => {
         const updatedSessions = await tryAndCatch(fetchVotingSessions, { organiser })
         if (updatedSessions)
@@ -22,12 +21,13 @@ const useVotingSessions = ({organiser,votingSessions}) => {
             updateSessions()
     }
 
-    return {sessions,updateSessions,deleteSession}
+    return { sessions, updateSessions, deleteSession }
 }
 const SessionsAsAdmin = ({ organiser, votingSessions }) => {
-    const {sessions,updateSessions,deleteSession} = useVotingSessions({organiser,votingSessions})
+    const { sessions, updateSessions, deleteSession } = useVotingSessions({ organiser, votingSessions })
     const [displayCNS, setDisplayCNS] = useState(false)
     const [sessionForCopy, setSessionForCopy] = useState(null)
+
     const Session = ({ e, organiser }) => (<>{e.description} <a href={`/${organiser}/${e.id}`}>{"[voting view]"}</a> <a href={`/${organiser}/${e.id}/summary`}>{"[summary view]"}</a></>)
 
     const handleDelete = (id) => () => deleteSession(id)
@@ -62,9 +62,9 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
             <div className="grid-wrapper">
                 {arr.map(e =>
                     <React.Fragment key={e.id}>
-                        <span style={{alignSelf: "center", overflowWrap: "anywhere"}}><Session organiser={organiser} e={e} /></span>
-                        <span style={{alignSelf: "center", marginLeft: "20px"}}><CopyButton e={e} /></span>
-                        <span style={{alignSelf: "center"}}><DeleteButton e={e} /></span>
+                        <span style={{ alignSelf: "center", overflowWrap: "anywhere" }}><Session organiser={organiser} e={e} /></span>
+                        <span style={{ alignSelf: "center", marginLeft: "20px" }}><CopyButton e={e} /></span>
+                        <span style={{ alignSelf: "center" }}><DeleteButton e={e} /></span>
                     </React.Fragment>)}
             </div>
 
@@ -76,7 +76,7 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
             <DisplaySessions arr={sessions.ongoing} label="ongoing" />
             <h1 align="center"> Expired sessions </h1>
             <DisplaySessions arr={sessions.expired} label="expired" />
-            <div className="center-aligned-flex column centered twentypxmargins" style={{padding: "20px"}}>
+            <div className="center-aligned-flex column centered" style={{ padding: "20px" }}>
                 <button className="button" onClick={() => setDisplayCNS(true)}>Create new voting session</button>
             </div>
         </div>)

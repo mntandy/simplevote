@@ -2,7 +2,10 @@ import Register from "@/app/components/Register"
 
 const Page = () => {
     return (
-            <Register/>
+        <>
+            <h2>Register a new user</h2>
+            <Register />
+        </>
     )
 }
 

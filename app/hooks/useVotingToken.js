@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { fetchVotingRightsWithKey, fetchVotingTokenWithKey, postVote } from "@/app/lib/client/apiCalls"
+import { fetchVotingRightsWithKey, fetchVotingTokenWithKey } from "@/app/lib/client/apiCalls"
 import { tryAndCatch } from "../lib/client/errorHandling"
 
 const useVotingToken = ({organiser,sessionId}) => {
@@ -27,15 +27,6 @@ const useVotingToken = ({organiser,sessionId}) => {
             save(responseBody.token)
     }
 
-    const submitVote = async (id,upvote) => {
-        const result = await tryAndCatch(postVote,{organiser,sessionId,token:value,upvote,id})
-        if(result?.token)
-            save(result.token)
-        if(result?.info)
-            return {info:result.info}
-        return null
-    }
-
     useEffect(() => {
         const storedToken = localStorage.getItem("vote4it"+sessionId)
         if(storedToken)
@@ -49,7 +40,7 @@ const useVotingToken = ({organiser,sessionId}) => {
             setRequestKey(false)
     },[value])
 
-    return {votingToken:value,requestKey,submitKey,submitVote}
+    return {votingToken:value,requestKey,submitKey,saveToken:save}
 }
 
 export default useVotingToken

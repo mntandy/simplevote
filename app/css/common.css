@@ -26,23 +26,15 @@
     text-decoration: none;  
 }
 
-.common-voting-option {
-    flex: 0 1 1;
-    padding: 5px;
-}
-@media (min-width: 600px) {
-    .common-voting-option {
-        flex: 1 1 0;
-        padding: 5px;
-    }  
-}
-
 .common-voting-box {
     border-radius: 10px;
     padding: 10px;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    padding: 15px;
+    row-gap: 15px;
 }
 
 .common-summary-voting-box {
@@ -60,3 +52,21 @@
     margin: 30px;
     justify-content: center;
 }
+
+.common-content-box {
+    row-gap: 20px;
+    padding: 20px;
+}
+
+.common-voting-button-div {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+    margin: 3px;
+}
+
+.common-voting-button {
+    width: 90%;
+}   
+
+

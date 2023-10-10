@@ -52,17 +52,6 @@
     overflow-wrap:normal;
 }   
 
-.jammin-voting-button-disactivated {
-    font-size: 16px;
-    font-weight: 800;
-    margin: 2px;
-    border: 2px solid rgb(215, 215, 215);
-    background: rgb(215, 215, 215);
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    overflow-wrap:normal;
-}
-
 .jammin-voting-button:active {
     transform: translateY(2px);
 }
@@ -73,13 +62,5 @@
 }
 
 .jammin-voting-button-div {
-    margin: 3px;
     background-color: rgb(77, 72, 37);
-    width: fit-content;
-}
-
-.jammin-voting-button-div-disactivated {
-    margin: 3px;
-    background-color: rgb(215, 215, 215);
-    width: fit-content;
 }

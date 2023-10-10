@@ -7,7 +7,7 @@ const getOrganiser = (s) => s==="test" ? "jammin" : s
 const withStyle = (s) => hasStyle(s) ? getOrganiser(s) : "standard"
 
 export const getClasses = (organiser, classes) =>
-    classes.split(' ').flatMap(e => ([`${withStyle(organiser)}-${e}`,`common-${e}`])).join(" ")
+    classes.split(' ').flatMap(e => ([`common-${e}`,`${withStyle(organiser)}-${e}`])).join(" ")
 
 export const getLogo = (organiser) => getOrganiser(organiser) in Users ? "/" + getOrganiser(organiser) + ".jpg" : "/vote.png"
 

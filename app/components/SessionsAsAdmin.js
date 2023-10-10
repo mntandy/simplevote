@@ -5,7 +5,7 @@ import CreateNewVote from "@/app/components/CreateNewVote"
 import { fetchVotingSessions, deleteVotingSession } from '@/app/lib/client/apiCalls'
 import { tryAndCatch } from '@/app/lib/client/errorHandling'
 import { isNonEmptyArray } from '@/app/lib/basicutils'
-
+import { getClasses } from '../lib/styles'
 const useVotingSessions = ({ organiser, votingSessions }) => {
     const [sessions, setSessions] = useState(votingSessions)
 
@@ -71,8 +71,9 @@ const SessionsAsAdmin = ({ organiser, votingSessions }) => {
     if (displayCNS)
         return <CreateNewVote update={updateSessions} organiser={organiser} sessionId={sessionForCopy} close={() => setDisplayCNS(false)} />
     return (
-        <div>
-            <h1 align="center"> Ongoing voting sessions </h1>
+        <div
+                className={"center-aligned-flex column centered " + getClasses(organiser, "content-box")}>
+                <h1 align="center"> Ongoing voting sessions </h1>
             <DisplaySessions arr={sessions.ongoing} label="ongoing" />
             <h1 align="center"> Expired sessions </h1>
             <DisplaySessions arr={sessions.expired} label="expired" />

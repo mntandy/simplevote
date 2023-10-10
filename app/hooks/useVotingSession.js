@@ -6,7 +6,7 @@ import useInterval from '@/app/hooks/useInterval'
 import useVotingToken from '@/app/hooks/useVotingToken'
 import useCountdown from "./useCountdown"
 import useToggleState from "./useToggleState"
-import { fetchVotingSession } from "../lib/client/apiCalls"
+import { fetchVotingSession, postVote } from "../lib/client/apiCalls"
 import { tryAndCatch } from "../lib/client/errorHandling"
 import { containsArray } from "../lib/basicutils"
 
@@ -14,7 +14,7 @@ const arrToMap = (arr) => arr.reduce((acc, e) => acc.set(e, 1 + (acc.get(e) || 0
 
 const useOptions = () => {
     const [options, set] = useState([])
-    
+
     const sorted = () => options.toSorted((a, b) => a.votes < b.votes ? 1 : (a.votes > b.votes ? -1 : 0))
     const unSorted = () => options
 
@@ -29,8 +29,7 @@ const useVotingSession = ({ sessionId, organiser }) => {
     const refreshTimer = useInterval()
     const [maxVotes, setMaxVotes] = useState(null)
     const [myVotes, setMyVotes] = useState(null)
-    const [voteSubmitted, setVoteSubmitted] = useState(false)
-    const { votingToken, requestKey, submitKey, submitVote } = useVotingToken({ sessionId, organiser })
+    const { votingToken, requestKey, submitKey, saveToken } = useVotingToken({ sessionId, organiser })
     const { timeleft, initialiseCountdown } = useCountdown({ organiser })
     const options = useOptions()
     const resetInfo = () => setInfo({})
@@ -57,26 +56,22 @@ const useVotingSession = ({ sessionId, organiser }) => {
         refreshTimer.set(fetchData, 3000)
     }
 
-    const handleVote = (id, value) => async () => {
-        if (voteSubmitted) {
-            setInfo({ ...info, [id]: "registerFirst" })
-        }
-        else {
-            setVoteSubmitted(true)
-            const result = await submitVote(id, value)
-            if (result?.info) {
-                if (id in info)
-                    resetInfo()
-                else {
-                    const temp = {}
-                    temp[id] = result.info
-                    setInfo(temp)
-                }
-            }
-            else
+    const submitVote = async (id, value) => {
+        console.log(value)
+        const result = await tryAndCatch(postVote, { organiser, sessionId, token: votingToken, upvote:value, id })
+        if (result?.token)
+            saveToken(result.token)
+        if (result?.info) {
+            if (id in info)
                 resetInfo()
+            else {
+                const temp = {}
+                temp[id] = result.info
+                setInfo(temp)
+            }
         }
-        setVoteSubmitted(false)
+        else
+            resetInfo()
     }
 
     useEffect(() => {
@@ -96,15 +91,15 @@ const useVotingSession = ({ sessionId, organiser }) => {
 
     return {
         timeleft,
-        maxVotes, 
-        myVotes, 
-        resetInfo, 
-        info, 
-        currentVotes, 
-        options,  
-        description, 
-        handleVote, 
-        submitKey, 
+        maxVotes,
+        myVotes,
+        resetInfo,
+        info,
+        currentVotes,
+        options,
+        description,
+        submitVote,
+        submitKey,
         requestKey,
         autoRefresh
     }

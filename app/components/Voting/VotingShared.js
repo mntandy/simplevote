@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react"
+import React,{ useEffect, useState } from "react"
 import RequestKey from './RequestKey'
 import useVotingSession from '@/app/hooks/useVotingSession'
 import useToggleState from "@/app/hooks/useToggleState"
@@ -8,6 +8,7 @@ import { getClasses, getUserText } from "@/app/lib/styles"
 import RefreshAndSort from "./RefreshAndSort"
 import OptionsForVoting from "./OptionsForVoting"
 import OptionsAsSummary from "./OptionsAsSummary"
+import { isNonEmptyArray } from "@/app/lib/basicutils"
 
 const Countdown = ({ timeleft }) => timeleft && <div>{timeleft}</div>
 
@@ -22,26 +23,27 @@ const VotingShared = ({ sessionId, organiser, summary = false }) => {
 
     if (votingSession.requestKey)
         return (<RequestKey organiser={organiser} submitKey={votingSession.submitKey} />)
-    else if (!votingSession.requestKey && votingSession.description === null)
-        return (<p>Loading...</p>)
+    else if (
+        (!votingSession.requestKey && votingSession.description === null) 
+        || !isNonEmptyArray(votingSession.options.unSorted()))
+        return (<div className="large-loader loader-colors" style={{margin: "50px"}}></div>)
     else return (
         <>
             <h1 align="center">{votingSession.description}</h1>
             <div
-                className={"center-aligned-flex column centered " + getClasses(organiser, "content-box")}
-                style={{ rowGap: "20px", padding: "20px" }}>
+                className={"center-aligned-flex column centered " + getClasses(organiser, "content-box")}>
                 <Countdown timeleft={votingSession.timeleft} />
                 <RefreshAndSort organiser={organiser} autoRefresh={votingSession.autoRefresh} sort={sort} />
                 {!summary ?
                     <>
                         <VotesLeft
-                            prganiser={organiser}
+                            organiser={organiser}
                             maxVotes={votingSession.maxVotes}
                             myVotes={votingSession.myVotes} />
                         <OptionsForVoting
                             organiser={organiser}
                             myVotes={votingSession.currentVotes}
-                            submitVote={votingSession.handleVote}
+                            submitVote={votingSession.submitVote}
                             options={sort.state ?
                                 votingSession.options.sorted()
                                 : votingSession.options.unSorted()}
